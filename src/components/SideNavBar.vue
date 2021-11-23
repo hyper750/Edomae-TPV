@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app>
+    <v-navigation-drawer app v-if="isLoggedIn">
         <v-list-item>
             <v-list-item-content>
                 <v-list-item-title>
@@ -13,23 +13,48 @@
         <v-divider />
 
         <v-list dense nav>
-            <v-list-item-group color="primary" v-model="selectedItemMenu">
-                <v-list-item
-                    v-for="(page, index) in pageList"
-                    :key="index"
-                    link
-                    :to="page.link"
+            <v-list-item
+                v-for="(page, index) in pageList"
+                :key="index"
+                :link="!page.subgroup"
+                :to="page.link"
+            >
+                <v-list-item-icon v-if="!page.subgroup">
+                    <v-icon>{{ page.icon }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content v-if="!page.subgroup">
+                    <v-list-item-title>
+                        {{ $t(page.name) }}
+                    </v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-group
+                    v-if="page.subgroup"
+                    :value="false"
+                    :prepend-icon="page.icon"
+                    style="width: 100%;"
                 >
-                    <v-list-item-icon>
-                        <v-icon>{{ page.icon }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title>
-                            {{ $t(page.name) }}
-                        </v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list-item-group>
+                    <template v-slot:activator>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ $t(page.name) }}</v-list-item-title>
+                        </v-list-item-content>
+                    </template>
+
+                    <v-list-item
+                        v-for="(subpage, index) in page.subgroup"
+                        :key="index"
+                        link
+                        :to="subpage.link"
+                    >
+                        <v-list-item-icon>
+                            <v-icon>{{ subpage.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ $t(subpage.name) }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-group>
+            </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -49,24 +74,25 @@ export default {
                     icon: "mdi-home",
                 },
                 {
-                    name: "Meal Category",
-                    link: "/mealCategory",
-                    icon: "mdi-antenna",
+                    name: "Admin",
+                    permissions: [() => this.isUserAdmin],
+                    icon: "mdi-wrench",
+                    subgroup: [
+                        {
+                            name: "Meal Category",
+                            link: "",
+                            icon: "mdi-antenna",
+                        },
+                    ],
                 },
             ],
-            selectedItemMenu: null,
         };
     },
 
-    mounted() {
-        // TODO: Always on home :/
-        const routeName = this.$route.name;
-        this.selectedItemMenu = this.pageList.findIndex(
-            ({ link }) => link === routeName
-        );
-    },
-
     computed: {
+        isLoggedIn() {
+            return this.$store.getters.getToken && this.$store.getters.getUser;
+        },
         username() {
             const user = this.$store.getters.getUser;
             return user ? user.username : "";
