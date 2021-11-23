@@ -41,8 +41,8 @@
                     </template>
 
                     <v-list-item
-                        v-for="(subpage, index) in page.subgroup"
-                        :key="index"
+                        v-for="(subpage, subpageIndex) in page.subgroup"
+                        :key="subpageIndex"
                         link
                         :to="subpage.link"
                     >
@@ -80,9 +80,14 @@ export default {
                     subgroup: [
                         {
                             name: "Meal Category",
-                            link: "",
-                            icon: "mdi-antenna",
+                            link: "/mealCategory",
+                            icon: "mdi-shape",
                         },
+                        {
+                            name: 'Meal',
+                            link: '/meal',
+                            icon: 'mdi-food-fork-drink'
+                        }
                     ],
                 },
             ],
