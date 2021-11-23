@@ -4,7 +4,7 @@ import './assets/css/dashboard.css';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import i18n from './translations';
-import vuex from './store';
+import store from './store';
 
 Vue.config.productionTip = false
 
@@ -12,6 +12,6 @@ new Vue({
   vuetify,
   router,
   i18n,
-  vuex,
+  store,
   render: h => h(App)
 }).$mount('#app')
