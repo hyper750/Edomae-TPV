@@ -14,7 +14,7 @@
 
         <v-list dense nav>
             <v-list-item
-                v-for="(page, index) in pageList"
+                v-for="(page, index) in getPageList"
                 :key="index"
                 :link="!page.subgroup"
                 :to="page.link"
@@ -95,6 +95,20 @@ export default {
     },
 
     computed: {
+        getPageList() {
+            return this.pageList.filter((page) => {
+                if( !page.permissions ) {
+                    return true;
+                }
+
+                let permission = true;
+                for(let permissionFunc of page.permissions) {
+                    permission &&= permissionFunc();
+                }
+
+                return permission;
+            });
+        },
         isLoggedIn() {
             return this.$store.getters.getToken && this.$store.getters.getUser;
         },
