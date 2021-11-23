@@ -57,10 +57,9 @@ export default {
     },
 
     methods: {
-        deleteObject() {
-            MealCategoryEndpoints.delete(this.mealCategory.id).then(() =>
-                this.$emit("delete")
-            );
+        async deleteObject() {
+            await MealCategoryEndpoints.delete(this.mealCategory.id);
+            this.$emit("delete");
         },
     },
 };
