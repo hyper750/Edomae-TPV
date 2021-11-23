@@ -6,6 +6,7 @@ import LoginPage from "../views/LoginPage";
 import PageNotFound from "../views/PageNotFound";
 import MealCategoryPage from "../views/MealCategoryPage";
 import UserEndpoints from "../axios/api/user";
+import i18n from "../translations";
 
 Vue.use(VueRouter);
 
@@ -17,8 +18,15 @@ const router = new VueRouter({
             path: '/',
             component: HomePage,
             meta: {
-                title: "Operate - Edomae",
-                login: true
+                title: i18n.t("Operate - Edomae"),
+                login: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t('Home'),
+                        href: '/',
+                        disabled: true,
+                    }
+                ]
             }
         },
         {
@@ -26,7 +34,7 @@ const router = new VueRouter({
             path: '/login',
             component: LoginPage,
             meta: {
-                title: "Login - Edomae",
+                title: i18n.t("Login - Edomae"),
             }
         },
         {
@@ -34,7 +42,7 @@ const router = new VueRouter({
             path: '/register',
             component: PageNotFound,
             meta: {
-                title: 'Register - Edomae',
+                title: i18n.t('Register - Edomae'),
             }
         },
         {
@@ -42,9 +50,20 @@ const router = new VueRouter({
             path: '/mealCategory',
             component: MealCategoryPage,
             meta: {
-                title: 'MealCategory - Edomae',
+                title: i18n.t('MealCategory - Edomae'),
                 login: true,
-                admin: true
+                admin: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t('Admin'),
+                        disabled: true,
+                    },
+                    {
+                        text: i18n.t('Meal category'),
+                        disabled: true,
+                        href: '/mealCategory'
+                    }
+                ]
             }
         },
         {
@@ -52,7 +71,7 @@ const router = new VueRouter({
             path: '/:patchMatch(.*)*',
             component: PageNotFound,
             meta: {
-                title: 'Page not found - Edomae',
+                title: i18n.t('Page not found - Edomae'),
             }
         }
     ]
