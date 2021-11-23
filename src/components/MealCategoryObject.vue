@@ -58,6 +58,7 @@ export default {
 
     methods: {
         async deleteObject() {
+            // TODO: Handle errors
             await MealCategoryEndpoints.delete(this.mealCategory.id);
             this.$emit("delete");
         },
