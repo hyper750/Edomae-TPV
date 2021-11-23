@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="vh-100 light-blue lighten-3">
+    <v-container fluid class="vh-100">
         <v-row class="vh-100">
             <v-col
                 cols="12"

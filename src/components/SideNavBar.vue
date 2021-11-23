@@ -56,8 +56,43 @@
                 </v-list-group>
             </v-list-item>
         </v-list>
+        
+        <v-container fluid class="userMenu">
+            <v-row>
+                <v-col cols="12">
+                    <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                                {{ username }}
+                            </v-btn>
+                        </template>
+
+                        <v-list>
+                            <v-list-item link @click="logout">
+                                <v-list-item-icon>
+                                    <v-icon>
+                                        mdi-logout
+                                    </v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ $t('Logout') }}</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </v-col>
+            </v-row>
+        </v-container>
     </v-navigation-drawer>
 </template>
+
+<style scoped>
+.userMenu {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+</style>
 
 <script>
 import UserEndpoints from "../axios/api/user";
@@ -124,9 +159,6 @@ export default {
     },
 
     methods: {
-        isPageActive(page) {
-            return this.$route.name === page;
-        },
         async logout() {
             await UserEndpoints.logout();
             this.$store.dispatch("setToken", null);
