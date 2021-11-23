@@ -6,7 +6,10 @@
     cursor: pointer;
 }
 
-
 .imatge-object {
     height: 200px;
+}
+
+.disabledOpacity {
+    opacity: 0.25;
 }
