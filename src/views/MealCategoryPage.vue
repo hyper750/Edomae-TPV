@@ -10,12 +10,7 @@
             <v-col cols="12">
                 <v-dialog v-model="showCreateDialog">
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            type="button"
-                            color="success"
-                            v-on="on"
-                            v-bind="attrs"
-                        >
+                        <v-btn color="success" v-on="on" v-bind="attrs">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -31,7 +26,7 @@
                             {{ $t("Add") }}
                         </v-btn>
                     </template>
-                    <MealCategoryDialog />
+                    <MealCategoryDialog @close="closeCreateDialog" @save="saveCreateDialog" />
                 </v-dialog>
             </v-col>
         </v-row>
@@ -51,7 +46,11 @@
                             @delete="loadMealCategory()"
                         />
                     </template>
-                    <MealCategoryDialog :mealCategory="mealCategory" />
+                    <MealCategoryDialog
+                        :mealCategory="mealCategory"
+                        @close="closeUpdateDialog"
+                        @save="saveUpdateDialog"
+                    />
                 </v-dialog>
             </v-col>
         </v-row>
@@ -88,6 +87,24 @@ export default {
             MealCategoryEndpoints.list().then(
                 ({ data }) => (this.mealCategories = data)
             );
+        },
+
+        saveCreateDialog() {
+            this.showCreateDialog = false;
+            this.loadMealCategory();
+        },
+
+        saveUpdateDialog() {
+            this.showUpdateDialog = false;
+            this.loadMealCategory();
+        },
+        
+        closeCreateDialog() {
+            this.showCreateDialog = false;
+        },
+
+        closeUpdateDialog() {
+            this.showUpdateDialog = false;
         },
     },
 };
