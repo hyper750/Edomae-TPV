@@ -13,7 +13,7 @@ const MealCategory = {
         formData.append('enabled', enabled);
         formData.append('name', name);
         formData.append('order', order);
-        formData.append('imatge', imatge[0], imatge[0].name);
+        formData.append('imatge', imatge, imatge.name);
         return await getApiWithLogin().post(this.ENDPOINT, formData)
     },
 
@@ -30,7 +30,7 @@ const MealCategory = {
         // TODO: Why is obligated to update the imatge?
         // TODO: Update enabled is not working
         if (imatge) {
-            formData.append('imatge', imatge[0], imatge[0].name);
+            formData.append('imatge', imatge, imatge.name);
         }
 
         return await getApiWithLogin().put(`${this.ENDPOINT}/${id}`, formData)
