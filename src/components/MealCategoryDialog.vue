@@ -102,7 +102,7 @@ export default {
                     order: this.order,
                     imatge: this.imatge,
                 }).catch(() =>
-                    this.$store.dispatch('setGlobalError', "Error saving meal categories")
+                    this.$store.dispatch('setGlobalError', this.$i18n.t("Error saving meal categories"))
                 );
             }
 
