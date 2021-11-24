@@ -78,7 +78,7 @@ export default {
     methods: {
         resetForm() {
             this.enabled = true;
-            this.name = '';
+            this.name = "";
             this.order = 1;
             this.imatge = null;
         },
@@ -92,17 +92,18 @@ export default {
 
         async save() {
             // Save or create
-            if(this.mealCategory) {
+            if (this.mealCategory) {
                 // Update
-            }
-            else {
+            } else {
                 // Create
                 await MealCategoryEndpoints.post({
                     enabled: this.enabled,
                     name: this.name,
                     order: this.order,
-                    imatge: this.imatge
-                });
+                    imatge: this.imatge,
+                }).catch(() =>
+                    this.$store.dispatch('setGlobalError', "Error saving meal categories")
+                );
             }
 
             this.resetForm();
