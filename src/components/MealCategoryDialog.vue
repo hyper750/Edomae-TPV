@@ -75,6 +75,15 @@ export default {
         };
     },
 
+    watch: {
+        mealCategory: function (newValue) {
+            this.enabled = newValue.enabled;
+            this.name = newValue.name;
+            this.order = newValue.order;
+            // this.imatge = newValue.imatge;
+        },
+    },
+
     methods: {
         resetForm() {
             this.enabled = true;
@@ -82,8 +91,6 @@ export default {
             this.order = 1;
             this.imatge = null;
         },
-
-        setData() {},
 
         close() {
             this.resetForm();
@@ -94,6 +101,17 @@ export default {
             // Save or create
             if (this.mealCategory) {
                 // Update
+                await MealCategoryEndpoints.put(this.mealCategory.id, {
+                    enabled: this.enabled,
+                    name: this.name,
+                    order: this.order,
+                    imatge: this.imatge,
+                }).catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Error updating meal categories")
+                    )
+                );
             } else {
                 // Create
                 await MealCategoryEndpoints.post({
@@ -102,7 +120,10 @@ export default {
                     order: this.order,
                     imatge: this.imatge,
                 }).catch(() =>
-                    this.$store.dispatch('setGlobalError', this.$i18n.t("Error saving meal categories"))
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Error saving meal categories")
+                    )
                 );
             }
 

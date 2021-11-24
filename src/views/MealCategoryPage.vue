@@ -26,10 +26,21 @@
                             {{ $t("Add") }}
                         </v-btn>
                     </template>
-                    <MealCategoryDialog @close="closeCreateDialog" @save="saveCreateDialog" />
+                    <MealCategoryDialog
+                        @close="closeCreateDialog"
+                        @save="saveCreateDialog"
+                    />
                 </v-dialog>
             </v-col>
         </v-row>
+
+        <v-dialog v-model="showUpdateDialog" eager>
+            <MealCategoryDialog
+                :mealCategory="updateMealCategory"
+                @close="closeUpdateDialog"
+                @save="saveUpdateDialog"
+            />
+        </v-dialog>
 
         <v-row class="mt-2">
             <v-col
@@ -37,21 +48,12 @@
                 v-for="mealCategory in mealCategories"
                 :key="mealCategory.id"
             >
-                <v-dialog v-model="showUpdateDialog">
-                    <template v-slot:activator="{ on, attrs }">
-                        <MealCategoryObject
-                            v-on="on"
-                            v-bind="attrs"
-                            :mealCategory="mealCategory"
-                            @delete="loadMealCategory()"
-                        />
-                    </template>
-                    <MealCategoryDialog
+                <span @click.stop="() => openUpdateDialog(mealCategory)">
+                    <MealCategoryObject
                         :mealCategory="mealCategory"
-                        @close="closeUpdateDialog"
-                        @save="saveUpdateDialog"
+                        @delete="loadMealCategory()"
                     />
-                </v-dialog>
+                </span>
             </v-col>
         </v-row>
     </v-container>
@@ -75,6 +77,7 @@ export default {
             mealCategories: [],
             showUpdateDialog: false,
             showCreateDialog: false,
+            updateMealCategory: null,
         };
     },
 
@@ -98,13 +101,18 @@ export default {
             this.showUpdateDialog = false;
             this.loadMealCategory();
         },
-        
+
         closeCreateDialog() {
             this.showCreateDialog = false;
         },
 
         closeUpdateDialog() {
             this.showUpdateDialog = false;
+        },
+
+        openUpdateDialog(mealCategory) {
+            this.updateMealCategory = mealCategory;
+            this.showUpdateDialog = true;
         },
     },
 };
