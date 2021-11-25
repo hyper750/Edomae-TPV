@@ -36,12 +36,6 @@
             </v-container>
         </v-card-text>
         <v-card-actions>
-            <v-btn @click="close()" color="blue darken-1" text>
-                {{ $t("Close") }}
-            </v-btn>
-            <v-btn @click="save()" color="blue darken-1" text>
-                {{ $t("Save") }}
-            </v-btn>
             <v-dialog v-model="deleteDialog" eager>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -59,6 +53,13 @@
                     @deny="closeConfirmDialog"
                 />
             </v-dialog>
+            <v-spacer />
+            <v-btn @click="close()" color="blue darken-1" text>
+                {{ $t("Close") }}
+            </v-btn>
+            <v-btn @click="save()" color="blue darken-1" text>
+                {{ $t("Save") }}
+            </v-btn>
         </v-card-actions>
     </v-card>
 </template>
