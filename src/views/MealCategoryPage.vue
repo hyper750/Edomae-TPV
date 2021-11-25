@@ -93,12 +93,12 @@ export default {
         },
 
         saveCreateDialog() {
-            this.showCreateDialog = false;
+            this.closeCreateDialog();
             this.loadMealCategory();
         },
 
         saveUpdateDialog() {
-            this.showUpdateDialog = false;
+            this.closeUpdateDialog();
             this.loadMealCategory();
         },
 
