@@ -87,9 +87,14 @@ export default {
 
     methods: {
         loadMealCategory() {
-            MealCategoryEndpoints.list().then(
-                ({ data }) => (this.mealCategories = data)
-            );
+            MealCategoryEndpoints.list()
+                .then(({ data }) => (this.mealCategories = data))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Error listing meal categories")
+                    )
+                );
         },
 
         saveCreateDialog() {
