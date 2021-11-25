@@ -5,6 +5,7 @@ import HomePage from "../views/HomePage";
 import LoginPage from "../views/LoginPage";
 import PageNotFound from "../views/PageNotFound";
 import MealCategoryPage from "../views/MealCategoryPage";
+import MealPage from "../views/MealPage";
 import UserEndpoints from "../axios/api/user";
 import i18n from "../translations";
 
@@ -67,6 +68,27 @@ const router = new VueRouter({
             }
         },
         {
+            name: 'Meal',
+            path: '/meal',
+            component: MealPage,
+            meta: {
+                title: i18n.t('Meal - Edomae'),
+                login: true,
+                admin: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t('Admin'),
+                        disabled: true,
+                    },
+                    {
+                        text: i18n.t('Meal'),
+                        disabled: true,
+                        href: '/meal'
+                    }
+                ]
+            }
+        },
+        {
             name: 'Page not found',
             path: '/:patchMatch(.*)*',
             component: PageNotFound,
@@ -104,7 +126,7 @@ router.beforeEach(async (to, from, next) => {
                 store.dispatch('setUser', data);
 
                 // Check admin page and have the proper permission
-                if(!data.admin && to.meta.admin) {
+                if (!data.admin && to.meta.admin) {
                     next({ path: '/pageNotFound' })
                 }
                 else {
