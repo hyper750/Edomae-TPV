@@ -26,20 +26,21 @@
                             {{ $t("Add") }}
                         </v-btn>
                     </template>
-                    <MealDialog
+                    <!--<MealDialog
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
-                    />
+                    />-->
                 </v-dialog>
             </v-col>
         </v-row>
 
         <v-dialog v-model="showUpdateDialog" eager>
-            <MealDialog
+            <!--<MealDialog
                 :meal="updateMeal"
                 @close="closeUpdateDialog"
                 @save="saveUpdateDialog"
-            />
+                @delete="deleteObjectDialog"
+            />-->
         </v-dialog>
 
         <v-row>
@@ -56,13 +57,13 @@
 import BreadCrumb from "../components/BreadCrumb";
 import MealEndpoints from "../axios/api/meal";
 import MealObject from "../components/MealObject";
-import MealDialog from "../components/MealDialog";
+// import MealDialog from "../components/MealDialog";
 
 export default {
     components: {
         BreadCrumb,
         MealObject,
-        MealDialog,
+        // MealDialog,
     },
 
     mounted() {
@@ -111,6 +112,11 @@ export default {
         openUpdateDialog(meal) {
             this.updateMeal = meal;
             this.showUpdateDialog = true;
+        },
+
+        deleteObjectDialog() {
+            this.closeUpdateDialog();
+            this.loadMeal();
         },
     },
 };
