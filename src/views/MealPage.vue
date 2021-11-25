@@ -26,8 +26,27 @@
                             {{ $t("Add") }}
                         </v-btn>
                     </template>
-                    <MealDialog @close="closeCreateDialog" @save="saveCreateDialog" />
+                    <MealDialog
+                        @close="closeCreateDialog"
+                        @save="saveCreateDialog"
+                    />
                 </v-dialog>
+            </v-col>
+        </v-row>
+
+        <v-dialog v-model="showUpdateDialog" eager>
+            <MealDialog
+                :meal="updateMeal"
+                @close="closeUpdateDialog"
+                @save="saveUpdateDialog"
+            />
+        </v-dialog>
+
+        <v-row>
+            <v-col cols="4" v-for="meal in meals" :key="meal.id">
+                <span @click.stop="() => openUpdateDialog(meal)">
+                    <MealObject :meal="meal" @delete="loadMeal()" />
+                </span>
             </v-col>
         </v-row>
     </v-container>
@@ -42,16 +61,29 @@ export default {
         BreadCrumb,
     },
 
+    mounted() {
+        this.loadMeal();
+    },
+
     data() {
         return {
             meals: [],
             showCreateDialog: false,
+            showUpdateDialog: false,
+            updateMeal: null,
         };
     },
 
     methods: {
         loadMeal() {
-
+            MealEndpoints.list()
+                .then(({ data }) => (this.meals = data))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Error listing meals")
+                    )
+                );
         },
 
         closeCreateDialog() {
@@ -61,7 +93,21 @@ export default {
         saveCreateDialog() {
             this.closeCreateDialog();
             this.loadMeal();
-        }
-    }
+        },
+
+        closeUpdateDialog() {
+            this.showUpdateDialog = false;
+        },
+
+        saveUpdateDialog() {
+            this.closeUpdateDialog();
+            this.loadMealCategory();
+        },
+
+        openUpdateDialog(meal) {
+            this.updateMeal = meal;
+            this.showUpdateDialog = true;
+        },
+    },
 };
 </script>
