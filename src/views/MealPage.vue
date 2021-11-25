@@ -55,10 +55,14 @@
 <script>
 import BreadCrumb from "../components/BreadCrumb";
 import MealEndpoints from "../axios/api/meal";
+import MealObject from "../components/MealObject";
+import MealDialog from "../components/MealDialog";
 
 export default {
     components: {
         BreadCrumb,
+        MealObject,
+        MealDialog,
     },
 
     mounted() {
@@ -101,7 +105,7 @@ export default {
 
         saveUpdateDialog() {
             this.closeUpdateDialog();
-            this.loadMealCategory();
+            this.loadMeal();
         },
 
         openUpdateDialog(meal) {
