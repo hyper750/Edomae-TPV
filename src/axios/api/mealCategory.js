@@ -28,7 +28,6 @@ const MealCategory = {
         formData.append('name', name);
         formData.append('order', order);
         // TODO: Why is obligated to update the imatge?
-        // TODO: Update enabled is not working
         if (imatge) {
             formData.append('imatge', imatge, imatge.name);
         }
