@@ -42,12 +42,30 @@
             <v-btn @click="save()" color="blue darken-1" text>
                 {{ $t("Save") }}
             </v-btn>
+            <v-dialog v-model="deleteDialog" eager>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-on="on"
+                        v-bind="attrs"
+                        color="error darken-1"
+                        text
+                        v-show="mealCategory"
+                    >
+                        {{ $t("Delete") }}
+                    </v-btn>
+                </template>
+                <DeleteConfirmDialog
+                    @accept="acceptConfirmDialog"
+                    @deny="closeConfirmDialog"
+                />
+            </v-dialog>
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
 import MealCategoryEndpoints from "../axios/api/mealCategory";
+import DeleteConfirmDialog from "./DeleteConfirmDialog.vue";
 
 export default {
     props: {
@@ -56,8 +74,13 @@ export default {
         },
     },
 
+    components: {
+        DeleteConfirmDialog,
+    },
+
     data() {
         return {
+            deleteDialog: false,
             enabled: true,
             name: "",
             nameRules: [
@@ -129,6 +152,26 @@ export default {
 
             this.resetForm();
             this.$emit("save");
+        },
+
+        async deleteObject() {
+            await MealCategoryEndpoints.delete(this.mealCategory.id).catch(() =>
+                this.$store.dispatch(
+                    "setGlobalError",
+                    this.$i18n.t("Error deleting the meal category")
+                )
+            );
+            this.resetForm();
+            this.$emit("delete");
+        },
+
+        async acceptConfirmDialog() {
+            this.closeConfirmDialog();
+            await this.deleteObject();
+        },
+
+        closeConfirmDialog() {
+            this.deleteDialog = false;
         },
     },
 };

@@ -39,6 +39,7 @@
                 :mealCategory="updateMealCategory"
                 @close="closeUpdateDialog"
                 @save="saveUpdateDialog"
+                @delete="deleteObjectDialog"
             />
         </v-dialog>
 
@@ -49,10 +50,7 @@
                 :key="mealCategory.id"
             >
                 <span @click.stop="() => openUpdateDialog(mealCategory)">
-                    <MealCategoryObject
-                        :mealCategory="mealCategory"
-                        @delete="loadMealCategory()"
-                    />
+                    <MealCategoryObject :mealCategory="mealCategory" />
                 </span>
             </v-col>
         </v-row>
@@ -118,6 +116,11 @@ export default {
         openUpdateDialog(mealCategory) {
             this.updateMealCategory = mealCategory;
             this.showUpdateDialog = true;
+        },
+
+        deleteObjectDialog() {
+            this.closeUpdateDialog();
+            this.loadMealCategory();
         },
     },
 };
