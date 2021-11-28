@@ -122,15 +122,19 @@ export default {
         },
 
         async save() {
+            const mealCategoryUpdate = {
+                enabled: this.enabled,
+                name: this.name,
+                order: this.order,
+                imatge: this.imatge,
+            };
             // Save or create
             if (this.mealCategory) {
                 // Update
-                await MealCategoryEndpoints.put(this.mealCategory.id, {
-                    enabled: this.enabled,
-                    name: this.name,
-                    order: this.order,
-                    imatge: this.imatge,
-                }).catch(() =>
+                await MealCategoryEndpoints.put(
+                    this.mealCategory.id,
+                    mealCategoryUpdate
+                ).catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Error updating meal categories")
@@ -138,12 +142,7 @@ export default {
                 );
             } else {
                 // Create
-                await MealCategoryEndpoints.post({
-                    enabled: this.enabled,
-                    name: this.name,
-                    order: this.order,
-                    imatge: this.imatge,
-                }).catch(() =>
+                await MealCategoryEndpoints.post(mealCategoryUpdate).catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Error saving meal categories")
