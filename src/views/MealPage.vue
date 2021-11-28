@@ -35,12 +35,12 @@
         </v-row>
 
         <v-dialog v-model="showUpdateDialog" eager>
-            <!--<MealDialog
+            <MealDialog
                 :meal="updateMeal"
                 @close="closeUpdateDialog"
                 @save="saveUpdateDialog"
                 @delete="deleteObjectDialog"
-            />-->
+            />
         </v-dialog>
 
         <v-row>
