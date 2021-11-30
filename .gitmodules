@@ -1,0 +1,3 @@
+[submodule "src/translations/translations"]
+	path = src/translations/translations
+	url = https://github.com/hyper750/Comandero-Translations.git
