@@ -100,7 +100,6 @@ const router = new VueRouter({
 });
 
 router.afterEach((to) => {
-    // TODO: Translate title, useI18n only works for setup()
     document.title = to.meta.title || 'Edomae';
 });
 
