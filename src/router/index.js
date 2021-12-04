@@ -39,14 +39,6 @@ const router = new VueRouter({
             }
         },
         {
-            name: 'Register',
-            path: '/register',
-            component: PageNotFound,
-            meta: {
-                title: i18n.t('Register - Edomae'),
-            }
-        },
-        {
             name: 'Meal category',
             path: '/mealCategory',
             component: MealCategoryPage,

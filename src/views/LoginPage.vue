@@ -42,12 +42,7 @@
                     </v-row>
 
                     <v-row>
-                        <v-col md="6" cols="6">
-                            <router-link :to="{ name: 'Register' }">
-                                {{ $t("Register") }}
-                            </router-link>
-                        </v-col>
-                        <v-col md="6" cols="6" class="text-right">
+                        <v-col cols="12" class="text-right">
                             <v-btn
                                 color="primary"
                                 :disabled="isLoading"
