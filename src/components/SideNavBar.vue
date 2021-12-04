@@ -136,6 +136,11 @@ export default {
                             link: "/meal",
                             icon: "mdi-food-fork-drink",
                         },
+                        {
+                            name: 'Payment Methods',
+                            link: '/paymentMethods',
+                            icon: 'mdi-credit-card-outline',
+                        }
                     ],
                 },
             ],
