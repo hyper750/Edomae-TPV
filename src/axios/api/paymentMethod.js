@@ -4,23 +4,33 @@ import { getApiWithLogin } from "../axios";
 export default {
     ENDPOINT: '/paymentMethod',
 
-    list() {
-
+    async list() {
+        return await getApiWithLogin().get(this.ENDPOINT);
     },
 
-    get(id) {
-
+    async get(id) {
+        return await getApiWithLogin().get(`${this.ENDPOINT}/${id}`);
     },
 
-    post(paymentMethod) {
+    async post(paymentMethod) {
+        const { enabled, name } = paymentMethod;
+        const formData = new FormData();
+        formData.append('enabled', enabled);
+        formData.append('name', name);
 
+        return await getApiWithLogin().post(this.ENDPOINT, formData);
     },
 
-    put(id, paymentMethod) {
+    async put(id, paymentMethod) {
+        const { enabled, name } = paymentMethod;
+        const formData = new FormData();
+        formData.append('enabled', enabled);
+        formData.append('name', name);
 
+        return await getApiWithLogin().put(`${this.ENDPOINT}/${id}`, formData);
     },
 
-    delete(id) {
-
+    async delete(id) {
+        return await getApiWithLogin().delete(`${this.ENDPOINT}/${id}`);
     },
 };
