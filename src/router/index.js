@@ -5,7 +5,7 @@ import HomePage from "../views/HomePage";
 import LoginPage from "../views/LoginPage";
 import MealCategoryPage from "../views/MealCategoryPage";
 import MealPage from "../views/MealPage";
-import PaymentMethodsPage from "../views/PaymentMethodsPage";
+import PaymentMethodPage from "../views/PaymentMethodPage";
 import PageNotFound from "../views/PageNotFound";
 import UserEndpoints from "../axios/api/user";
 import i18n from "../translations";
@@ -82,11 +82,11 @@ const router = new VueRouter({
             }
         },
         {
-            name: 'Payment methods',
-            path: '/paymentMethods',
-            component: PaymentMethodsPage,
+            name: 'Payment method',
+            path: '/paymentMethod',
+            component: PaymentMethodPage,
             meta: {
-                title: i18n.t('Payment methods - Edomae'),
+                title: i18n.t('Payment method - Edomae'),
                 login: true,
                 admin: true,
                 breadcrumb: [
@@ -95,9 +95,9 @@ const router = new VueRouter({
                         disabled: true,
                     },
                     {
-                        text: i18n.t('Payment methods'),
+                        text: i18n.t('Payment method'),
                         disabled: true,
-                        href: '/paymentMethods'
+                        href: '/paymentMethod'
                     }
                 ]
             }

@@ -137,8 +137,8 @@ export default {
                             icon: "mdi-food-fork-drink",
                         },
                         {
-                            name: 'Payment Methods',
-                            link: '/paymentMethods',
+                            name: 'Payment Method',
+                            link: '/paymentMethod',
                             icon: 'mdi-credit-card-outline',
                         }
                     ],

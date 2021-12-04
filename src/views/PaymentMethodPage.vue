@@ -38,7 +38,7 @@
 
 <script>
 import BreadCrumb from "../components/BreadCrumb.vue";
-import PaymentMethodsEndpoints from "../axios/api/paymentMethods";
+import PaymentMethodEndpoints from "../axios/api/paymentMethod";
 
 export default {
     components: {
@@ -48,7 +48,7 @@ export default {
     data() {
         return {
             showCreateDialog: false,
-            paymentMethodsAvailable: [],
+            paymentMethodAvailable: [],
         };
     },
 
@@ -58,8 +58,8 @@ export default {
 
     methods: {
         loadPaymentMethods() {
-            PaymentMethodsEndpoints.list()
-                .then(({ data }) => (this.paymentMethodsAvailable = data))
+            PaymentMethodEndpoints.list()
+                .then(({ data }) => (this.paymentMethodAvailable = data))
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
