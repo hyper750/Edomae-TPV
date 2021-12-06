@@ -33,16 +33,24 @@
                 </v-dialog>
             </v-col>
         </v-row>
+
+        <v-row>
+            <v-col md="4" v-for="paymentMethod in paymentMethodAvailable" :key="paymentMethod.id">
+                <PaymentMethodObject :paymentMethod="paymentMethod" />
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
 <script>
 import BreadCrumb from "../components/BreadCrumb.vue";
 import PaymentMethodEndpoints from "../axios/api/paymentMethod";
+import PaymentMethodObject from "../components/PaymentMethodObject";
 
 export default {
     components: {
         BreadCrumb,
+        PaymentMethodObject,
     },
 
     data() {
