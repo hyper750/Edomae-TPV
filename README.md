@@ -1,4 +1,4 @@
-# tpv-2.6
+# Edomae TPV
 
 ## Project setup
 ```
