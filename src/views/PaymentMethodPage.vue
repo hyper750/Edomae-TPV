@@ -46,11 +46,13 @@
 import BreadCrumb from "../components/BreadCrumb.vue";
 import PaymentMethodEndpoints from "../axios/api/paymentMethod";
 import PaymentMethodObject from "../components/PaymentMethodObject";
+import PaymentMethodDialog from "../components/PaymentMethodDialog";
 
 export default {
     components: {
         BreadCrumb,
         PaymentMethodObject,
+        PaymentMethodDialog,
     },
 
     data() {
