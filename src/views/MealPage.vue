@@ -46,7 +46,7 @@
         <v-row>
             <v-col md="4" v-for="meal in meals" :key="meal.id">
                 <span @click.stop="() => openUpdateDialog(meal)">
-                    <MealObject :meal="meal" @delete="loadMeal()" />
+                    <MealObject :meal="meal" />
                 </span>
             </v-col>
         </v-row>

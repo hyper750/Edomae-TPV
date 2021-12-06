@@ -28,22 +28,9 @@
 </template>
 
 <script>
-import MealEndpoints from "../axios/api/meal";
-
 export default {
     props: {
         meal: Object,
-    },
-
-    methods: {
-        async deleteObject() {
-            await MealEndpoints.delete(this.meal.id).catch(() =>
-                this.$store.dispatch(
-                    "setGlobalError",
-                    this.$i18n.t("Error deleting meal")
-                )
-            );
-        },
     },
 };
 </script>
