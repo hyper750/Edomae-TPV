@@ -29,12 +29,28 @@
         <v-card-actions>
             <v-dialog v-model="deleteDialog">
                 <template v-slot:activator="{ on, attrs }">
-                    <v-btn color="error darken-1" text v-show="paymentMethod" v-on="on" v-bind="attrs">
-                        {{ $t('Delete') }}
+                    <v-btn
+                        color="error darken-1"
+                        text
+                        v-show="paymentMethod"
+                        v-on="on"
+                        v-bind="attrs"
+                    >
+                        {{ $t("Delete") }}
                     </v-btn>
                 </template>
-                <DeleteConfirmDialog @accept="deleteObject" @deny="closeDeleteDialog" />
+                <DeleteConfirmDialog
+                    @accept="deleteObject"
+                    @deny="closeDeleteDialog"
+                />
             </v-dialog>
+            <v-spacer />
+            <v-btn color="blue darken-1" text @click="() => close()">
+                {{ $t("Close") }}
+            </v-btn>
+            <v-btn color="blue darken-1" text @click="() => save()">
+                {{ $t("Save") }}
+            </v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -74,6 +90,14 @@ export default {
         };
     },
 
+    watch: {
+        paymentMethod: function (newValue) {
+            this.enabled = newValue.enabled;
+            this.name = newValue.name;
+            // this.image = newValue.image;
+        },
+    },
+
     methods: {
         resetForms() {
             this.enabled = true;
@@ -87,9 +111,52 @@ export default {
 
         async deleteObject() {
             this.closeDeleteDialog();
-            await PaymentMethodEndpoints.delete(this.paymentMethod.id);
+            await PaymentMethodEndpoints.delete(this.paymentMethod.id).catch(
+                () =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$t("Can't delete payment method")
+                    )
+            );
             this.resetForms();
             this.$emit("delete");
+        },
+
+        close() {
+            this.resetForms();
+            this.$emit("close");
+        },
+
+        async save() {
+            const paymentMethodUpdate = {
+                enabled: this.enabled,
+                name: this.name,
+                image: this.image,
+            };
+
+            // Update
+            if (this.paymentMethod) {
+                await PaymentMethodEndpoints.put(
+                    this.paymentMethod.id,
+                    paymentMethodUpdate
+                ).catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$t("Can't update the payment method")
+                    )
+                );
+            } else {
+                // Create
+                await PaymentMethodEndpoints.post(paymentMethodUpdate).catch(
+                    () =>
+                        this.$store.dispatch(
+                            "setGlobalError",
+                            this.$t("Can't create the payment method")
+                        )
+                );
+            }
+            this.resetForms();
+            this.$emit("save");
         },
     },
 };

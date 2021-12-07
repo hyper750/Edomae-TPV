@@ -34,9 +34,24 @@
             </v-col>
         </v-row>
 
+        <v-dialog v-model="showUpdateDialog" eager>
+            <PaymentMethodDialog
+                :paymentMethod="lastPaymentMethod"
+                @close="closeUpdateDialog"
+                @save="saveUpdateDialog"
+                @delete="deleteUpdateDialog"
+            />
+        </v-dialog>
+
         <v-row>
-            <v-col md="4" v-for="paymentMethod in paymentMethodAvailable" :key="paymentMethod.id">
-                <PaymentMethodObject :paymentMethod="paymentMethod" />
+            <v-col
+                md="4"
+                v-for="paymentMethod in paymentMethodAvailable"
+                :key="paymentMethod.id"
+            >
+                <span @click.stop="() => setLastPaymentMethod(paymentMethod)">
+                    <PaymentMethodObject :paymentMethod="paymentMethod" />
+                </span>
             </v-col>
         </v-row>
     </v-container>
@@ -58,7 +73,9 @@ export default {
     data() {
         return {
             showCreateDialog: false,
+            showUpdateDialog: false,
             paymentMethodAvailable: [],
+            lastPaymentMethod: null,
         };
     },
 
@@ -85,6 +102,25 @@ export default {
         saveCreateDialog() {
             this.closeCreateDialog();
             this.loadPaymentMethods();
+        },
+
+        closeUpdateDialog() {
+            this.showUpdateDialog = false;
+        },
+
+        saveUpdateDialog() {
+            this.closeUpdateDialog();
+            this.loadPaymentMethods();
+        },
+
+        deleteUpdateDialog() {
+            this.closeUpdateDialog();
+            this.loadPaymentMethods();
+        },
+
+        setLastPaymentMethod(paymentMethod) {
+            this.showUpdateDialog = true;
+            this.lastPaymentMethod = paymentMethod;
         },
     },
 };

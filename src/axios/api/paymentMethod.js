@@ -13,19 +13,25 @@ export default {
     },
 
     async post(paymentMethod) {
-        const { enabled, name } = paymentMethod;
+        const { enabled, name, image } = paymentMethod;
+
         const formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('name', name);
+        formData.append('image', image, image.name);
 
         return await getApiWithLogin().post(this.ENDPOINT, formData);
     },
 
     async put(id, paymentMethod) {
-        const { enabled, name } = paymentMethod;
+        const { enabled, name, image } = paymentMethod;
+
         const formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('name', name);
+        if (image) {
+            formData.append('image', image, image.name);
+        }
 
         return await getApiWithLogin().put(`${this.ENDPOINT}/${id}`, formData);
     },
