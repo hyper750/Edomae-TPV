@@ -26,13 +26,30 @@
                 </v-row>
             </v-container>
         </v-card-text>
-        <v-card-actions> </v-card-actions>
+        <v-card-actions>
+            <v-dialog v-model="deleteDialog">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="error darken-1" text v-show="paymentMethod" v-on="on" v-bind="attrs">
+                        {{ $t('Delete') }}
+                    </v-btn>
+                </template>
+                <DeleteConfirmDialog @accept="deleteObject" @deny="closeDeleteDialog" />
+            </v-dialog>
+        </v-card-actions>
     </v-card>
 </template>
+
 <script>
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
+import PaymentMethodEndpoints from "../axios/api/paymentMethod";
+
 export default {
     props: {
         paymentMethod: Object,
+    },
+
+    components: {
+        DeleteConfirmDialog,
     },
 
     data() {
@@ -52,7 +69,28 @@ export default {
                     (f !== null && f.length > 0) ||
                     this.$i18n.t("An imatge is required"),
             ],
+
+            deleteDialog: false,
         };
+    },
+
+    methods: {
+        resetForms() {
+            this.enabled = true;
+            this.name = "";
+            this.image = null;
+        },
+
+        closeDeleteDialog() {
+            this.deleteDialog = false;
+        },
+
+        async deleteObject() {
+            this.closeDeleteDialog();
+            await PaymentMethodEndpoints.delete(this.paymentMethod.id);
+            this.resetForms();
+            this.$emit("delete");
+        },
     },
 };
 </script>
