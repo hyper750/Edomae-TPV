@@ -30,6 +30,7 @@
                             accept="image/*"
                             :label="$t('Imatge')"
                             v-model="imatge"
+                            :rules="imatgeRules"
                         />
                     </v-col>
                 </v-row>
@@ -82,7 +83,9 @@ export default {
     data() {
         return {
             deleteDialog: false,
+
             enabled: true,
+
             name: "",
             nameRules: [
                 (f) => f.length <= 250 || this.$t("Max 250 characters"),
@@ -90,12 +93,19 @@ export default {
                     f.length !== 0 ||
                     this.$t("At least a character is required"),
             ],
+
             order: 1,
             orderRules: [
                 (f) =>
                     f.length !== 0 || this.$t("Put an order for the category"),
             ],
+
             imatge: null,
+            imatgeRules: [
+                (f) =>
+                    (f !== null && f.length !== 0) ||
+                    this.$i18n.t("An imatge is required"),
+            ],
         };
     },
 
