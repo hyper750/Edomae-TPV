@@ -140,6 +140,11 @@ export default {
                             name: 'Payment Method',
                             link: '/paymentMethod',
                             icon: 'mdi-credit-card-outline',
+                        },
+                        {
+                            name: 'Local',
+                            link: '/local',
+                            icon: 'mdi-home-map-marker'
                         }
                     ],
                 },

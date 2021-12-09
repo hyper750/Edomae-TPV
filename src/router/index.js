@@ -6,6 +6,7 @@ import LoginPage from "../views/LoginPage";
 import MealCategoryPage from "../views/MealCategoryPage";
 import MealPage from "../views/MealPage";
 import PaymentMethodPage from "../views/PaymentMethodPage";
+import LocalPage from "../views/LocalPage";
 import PageNotFound from "../views/PageNotFound";
 import UserEndpoints from "../axios/api/user";
 import i18n from "../translations";
@@ -98,6 +99,27 @@ const router = new VueRouter({
                         text: i18n.t('Payment method'),
                         disabled: true,
                         href: '/paymentMethod'
+                    }
+                ]
+            }
+        },
+        {
+            name: 'Local',
+            path: '/local',
+            component: LocalPage,
+            meta: {
+                title: i18n.t('Local - Edomae'),
+                login: true,
+                admin: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t('Admin'),
+                        disabled: true,
+                    },
+                    {
+                        text: i18n.t('Local'),
+                        disabled: true,
+                        href: '/local'
                     }
                 ]
             }
