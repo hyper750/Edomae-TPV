@@ -1,7 +1,7 @@
 <template>
     <v-hover v-slot="{ hover }">
         <v-card
-            class="cursor-pointer mb-4 bg-white"
+            class="cursor-pointer mb-4"
             :class="{ 'elevation-12': hover, 'elevation-6': !hover }"
         >
             <v-img
