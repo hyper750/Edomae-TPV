@@ -7,6 +7,7 @@ import MealCategoryPage from "../views/MealCategoryPage";
 import MealPage from "../views/MealPage";
 import PaymentMethodPage from "../views/PaymentMethodPage";
 import LocalPage from "../views/LocalPage";
+import TablePage from "../views/TablePage";
 import PageNotFound from "../views/PageNotFound";
 import UserEndpoints from "../axios/api/user";
 import i18n from "../translations";
@@ -120,6 +121,27 @@ const router = new VueRouter({
                         text: i18n.t('Local'),
                         disabled: true,
                         href: '/local'
+                    }
+                ]
+            }
+        },
+        {
+            name: 'Table',
+            path: '/table',
+            component: TablePage,
+            meta: {
+                title: i18n.t('Table - Edomae'),
+                login: true,
+                admin: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t('Admin'),
+                        disabled: true
+                    },
+                    {
+                        text: i18n.t('Table'),
+                        disabled: true,
+                        href: '/table'
                     }
                 ]
             }

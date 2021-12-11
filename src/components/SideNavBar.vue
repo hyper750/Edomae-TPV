@@ -145,6 +145,11 @@ export default {
                             name: 'Local',
                             link: '/local',
                             icon: 'mdi-home-map-marker'
+                        },
+                        {
+                            name: 'Table',
+                            link: '/table',
+                            icon: 'mdi-table-furniture'
                         }
                     ],
                 },
