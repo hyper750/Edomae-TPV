@@ -4,8 +4,8 @@ import { getApiWithLogin } from "../axios";
 export default {
     ENDPOINT: '/paymentMethod',
 
-    async list() {
-        return await getApiWithLogin().get(this.ENDPOINT);
+    async list(filters) {
+        return await getApiWithLogin().get(this.ENDPOINT, { params: filters });
     },
 
     async get(id) {

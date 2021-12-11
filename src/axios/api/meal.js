@@ -4,7 +4,7 @@ export default {
     ENDPOINT: '/meal',
 
     async list(filters) {
-        return await getApiWithLogin().get(this.ENDPOINT, filters);
+        return await getApiWithLogin().get(this.ENDPOINT, { params: filters });
     },
 
     async post(meal) {
