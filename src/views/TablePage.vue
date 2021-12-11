@@ -15,6 +15,18 @@
                 />
             </v-col>
         </v-row>
+
+        <v-row v-if="selectedLocal">
+            <v-col md="12">
+                <div @click="handleLocalClicked">
+                    <v-img
+                        contain
+                        :src="getSelectedLocal.imatge"
+                        height="750"
+                    />
+                </div>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
@@ -51,6 +63,10 @@ export default {
                 };
             });
         },
+
+        getSelectedLocal() {
+            return this.locals.find(({ id }) => this.selectedLocal === id);
+        },
     },
 
     methods: {
@@ -69,6 +85,8 @@ export default {
                     )
                 );
         },
+
+        handleLocalClicked() {},
     },
 };
 </script>
