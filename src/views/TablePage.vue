@@ -30,6 +30,10 @@
                         v-for="table in tables"
                         :key="table.id"
                         class="table-item"
+                        :style="{
+                            top: table.y_coordinates,
+                            left: table.x_coordinates,
+                        }"
                         @click="handleTableClick"
                     />
                 </div>
@@ -41,16 +45,17 @@
 <style scoped>
 .local-item {
     height: 750px;
-    background-size: contain;
     background-position: center center;
 }
 
 .table-item {
-    position: absolute;
-    height: 24px;
+    position: relative;
+    display: inline-block;
+    height: 64px;
+    width: 64px;
     background-size: contain;
-    background-position: center center;
     background-image: url("@/assets/diningTable.jpg");
+    cursor: pointer;
 }
 </style>
 
