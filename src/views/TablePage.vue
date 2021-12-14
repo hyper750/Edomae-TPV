@@ -12,6 +12,7 @@
                     :items="getItems"
                     v-model="selectedLocal"
                     :label="$t('Select the local')"
+                    @change="onLocalChange"
                 />
             </v-col>
         </v-row>
@@ -33,6 +34,7 @@
 <script>
 import BreadCrumb from "../components/BreadCrumb";
 import LocalEndpoints from "../axios/api/local";
+import TableEndpoints from "../axios/api/table";
 
 export default {
     components: {
@@ -47,6 +49,7 @@ export default {
         return {
             locals: [],
             selectedLocal: null,
+            tables: [],
         };
     },
 
@@ -76,12 +79,26 @@ export default {
             LocalEndpoints.list()
                 .then(({ data }) => {
                     this.locals = data;
-                    this.selectedLocal = data[0].id;
+                    const localId = data[0].id;
+                    this.selectedLocal = localId;
+                    this.onLocalChange(localId);
                 })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Can't load locals")
+                    )
+                );
+        },
+
+        onLocalChange(newValue) {
+            // Load table for that local
+            TableEndpoints.list({ local: newValue })
+                .then(({ data }) => (this.tables = data))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't load tables")
                     )
                 );
         },
