@@ -30,6 +30,7 @@
                         v-for="table in tables"
                         :key="table.id"
                         class="table-item"
+                        :class="{ 'disabledOpacity': !table.enabled }"
                         :style="{
                             top: table.y_coordinates,
                             left: table.x_coordinates,
