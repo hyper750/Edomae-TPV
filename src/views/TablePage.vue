@@ -19,17 +19,40 @@
 
         <v-row v-if="selectedLocal">
             <v-col md="12">
-                <div @click="handleLocalClicked">
-                    <v-img
-                        contain
-                        :src="getSelectedLocal.imatge"
-                        height="750"
+                <div
+                    @click="handleLocalClicked"
+                    class="local-item"
+                    :style="{
+                        'background-image': `url(${getSelectedLocal.imatge})`,
+                    }"
+                >
+                    <span
+                        v-for="table in tables"
+                        :key="table.id"
+                        class="table-item"
+                        @click="handleTableClick"
                     />
                 </div>
             </v-col>
         </v-row>
     </v-container>
 </template>
+
+<style scoped>
+.local-item {
+    height: 750px;
+    background-size: contain;
+    background-position: center center;
+}
+
+.table-item {
+    position: absolute;
+    height: 24px;
+    background-size: contain;
+    background-position: center center;
+    background-image: url("@/assets/diningTable.jpg");
+}
+</style>
 
 <script>
 import BreadCrumb from "../components/BreadCrumb";
@@ -104,6 +127,8 @@ export default {
         },
 
         handleLocalClicked() {},
+
+        handleTableClick() {},
     },
 };
 </script>
