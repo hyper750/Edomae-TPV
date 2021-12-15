@@ -55,10 +55,10 @@ export default {
 
             number: 1,
             numberRules: [
-                (f) => f.length !== 0 || this.$t("Put a local number"),
+                (f) => f.length !== 0 || this.$t("Put a table number"),
                 (f) =>
                     parseInt(f) > 0 ||
-                    this.$t("The local number must be positive"),
+                    this.$t("The table number must be positive"),
             ],
 
             numberOfPersons: 1,
@@ -66,16 +66,15 @@ export default {
     },
 
     watch: {
-        table: function(newValue) {
-            if(!newValue) {
+        table: function (newValue) {
+            if (!newValue) {
                 this.resetForm();
-            }
-            else {
+            } else {
                 this.enabled = newValue.enabled;
                 this.number = newValue.number;
                 this.numberOfPersons = newValue.number_of_persons;
             }
-        }
+        },
     },
 
     methods: {
