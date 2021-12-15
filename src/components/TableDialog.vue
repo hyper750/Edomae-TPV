@@ -29,6 +29,23 @@
         </v-card-text>
 
         <v-card-actions>
+            <v-dialog v-model="deleteDialog">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        color="error darken-1"
+                        text
+                        v-show="table"
+                        v-on="on"
+                        v-bind="attrs"
+                    >
+                        {{ $t("Delete") }}
+                    </v-btn>
+                </template>
+                <DeleteConfirmDialog
+                    @accept="acceptConfirmDialog"
+                    @deny="closeConfirmDialog"
+                />
+            </v-dialog>
             <v-spacer />
             <v-btn color="blue darken-1" text @click="close()">
                 {{ $t("Close") }}
@@ -42,11 +59,16 @@
 
 <script>
 import TableEndpoints from "../axios/api/table";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 
 export default {
     props: {
         local: Number,
         table: Object,
+    },
+
+    components: {
+        DeleteConfirmDialog,
     },
 
     data() {
@@ -62,6 +84,8 @@ export default {
             ],
 
             numberOfPersons: 1,
+
+            deleteDialog: false,
         };
     },
 
@@ -119,6 +143,26 @@ export default {
 
             this.resetForm();
             this.$emit("save");
+        },
+
+        async deleteObject() {
+            await TableEndpoints.delete(this.table.id).catch(() =>
+                this.$store.dispatch(
+                    "setGlobalError",
+                    this.$i18n.t("Can't delete the table")
+                )
+            );
+            this.resetForm();
+            this.$emit("delete");
+        },
+
+        closeConfirmDialog() {
+            this.deleteDialog = false;
+        },
+
+        async acceptConfirmDialog() {
+            this.closeConfirmDialog();
+            await this.deleteObject();
         },
     },
 };

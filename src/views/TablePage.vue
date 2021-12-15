@@ -23,6 +23,7 @@
                 :local="selectedLocal"
                 @close="closeTableDialog"
                 @save="saveTableDialog"
+                @delete="deleteTableDialog"
             />
         </v-dialog>
 
@@ -158,6 +159,11 @@ export default {
         },
 
         saveTableDialog() {
+            this.closeTableDialog();
+            this.onLocalChange(this.selectedLocal);
+        },
+
+        deleteTableDialog() {
             this.closeTableDialog();
             this.onLocalChange(this.selectedLocal);
         },
