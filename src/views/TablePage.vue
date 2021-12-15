@@ -17,6 +17,15 @@
             </v-col>
         </v-row>
 
+        <v-dialog v-model="showTableDialog">
+            <TableDialog
+                :table="selectedTable"
+                :local="selectedLocal"
+                @close="closeTableDialog"
+                @save="saveTableDialog"
+            />
+        </v-dialog>
+
         <v-row v-if="selectedLocal">
             <v-col md="12">
                 <div
@@ -30,12 +39,12 @@
                         v-for="table in tables"
                         :key="table.id"
                         class="table-item"
-                        :class="{ 'disabledOpacity': !table.enabled }"
+                        :class="{ disabledOpacity: !table.enabled }"
                         :style="{
                             top: table.y_coordinates,
                             left: table.x_coordinates,
                         }"
-                        @click="handleTableClick"
+                        @click="() => handleTableClick(table)"
                     />
                 </div>
             </v-col>
@@ -62,12 +71,14 @@
 
 <script>
 import BreadCrumb from "../components/BreadCrumb";
+import TableDialog from "../components/TableDialog";
 import LocalEndpoints from "../axios/api/local";
 import TableEndpoints from "../axios/api/table";
 
 export default {
     components: {
         BreadCrumb,
+        TableDialog,
     },
 
     mounted() {
@@ -79,6 +90,9 @@ export default {
             locals: [],
             selectedLocal: null,
             tables: [],
+
+            showTableDialog: false,
+            selectedTable: null,
         };
     },
 
@@ -134,7 +148,19 @@ export default {
 
         handleLocalClicked() {},
 
-        handleTableClick() {},
+        handleTableClick(tableClicked) {
+            this.selectedTable = tableClicked;
+            this.showTableDialog = true;
+        },
+
+        closeTableDialog() {
+            this.showTableDialog = false;
+        },
+
+        saveTableDialog() {
+            this.closeTableDialog();
+            this.onLocalChange(this.selectedLocal);
+        },
     },
 };
 </script>
