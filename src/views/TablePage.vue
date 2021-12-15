@@ -148,7 +148,14 @@ export default {
         },
 
         handleLocalClicked(event) {
-            console.log(event);
+            const rect = event.target.getBoundingClientRect();
+            const xCoordinates = event.clientX - rect.left;
+            const yCoordinates = event.clientY - rect.top;
+            
+            console.log(`X: ${xCoordinates}`);
+            console.log(`Y: ${yCoordinates}`);
+
+            // TODO: Get coordinates relation between different screens
         },
 
         handleTableClick(tableClicked) {
