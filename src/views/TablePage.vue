@@ -55,7 +55,7 @@
     height: 64px;
     width: 64px;
     background-size: contain;
-    background-image: url("@/assets/diningTable.jpg");
+    background-image: url("@/assets/diningTableWhite.png");
     cursor: pointer;
 }
 </style>
