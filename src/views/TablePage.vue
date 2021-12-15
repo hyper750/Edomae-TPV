@@ -30,7 +30,7 @@
         <v-row v-if="selectedLocal">
             <v-col md="12">
                 <div
-                    @click="handleLocalClicked"
+                    @dblclick="handleLocalClicked"
                     class="local-item"
                     :style="{
                         'background-image': `url(${getSelectedLocal.imatge})`,
@@ -147,7 +147,9 @@ export default {
                 );
         },
 
-        handleLocalClicked() {},
+        handleLocalClicked(event) {
+            console.log(event);
+        },
 
         handleTableClick(tableClicked) {
             this.selectedTable = tableClicked;
