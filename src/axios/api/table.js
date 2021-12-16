@@ -33,8 +33,12 @@ export default {
         formData.append('number', number);
         formData.append('local', local);
         formData.append('number_of_persons', number_of_persons);
-        formData.append('x_coordinates', x_coordinates);
-        formData.append('y_coordinates', y_coordinates);
+        if(x_coordinates) {
+            formData.append('x_coordinates', x_coordinates);
+        }
+        if(y_coordinates) {
+            formData.append('y_coordinates', y_coordinates);
+        }
 
         return await getApiWithLogin().put(`${this.ENDPOINT}/${id}`, formData)
     },
