@@ -21,6 +21,8 @@
             <TableDialog
                 :table="selectedTable"
                 :local="selectedLocal"
+                :xCoordinates="xCoordinates"
+                :yCoordinates="yCoordinates"
                 @close="closeTableDialog"
                 @save="saveTableDialog"
                 @delete="deleteTableDialog"
@@ -94,6 +96,9 @@ export default {
 
             showTableDialog: false,
             selectedTable: null,
+
+            xCoordinates: null,
+            yCoordinates: null,
         };
     },
 
@@ -148,14 +153,24 @@ export default {
         },
 
         handleLocalClicked(event) {
+            this.selectedTable = null;
             const rect = event.target.getBoundingClientRect();
+
             const xCoordinates = event.clientX - rect.left;
             const yCoordinates = event.clientY - rect.top;
-            
-            console.log(`X: ${xCoordinates}`);
-            console.log(`Y: ${yCoordinates}`);
 
-            // TODO: Get coordinates relation between different screens
+            const elementWidth = event.currentTarget.offsetWidth;
+            const elementHeight = event.currentTarget.offsetHeight;
+
+            const yRelation = (yCoordinates / elementHeight) * 100;
+            const xRelation = (xCoordinates / elementWidth) * 100;
+
+            // Set coordinates
+            this.xCoordinates = xRelation;
+            this.yCoordinates = yRelation;
+
+            // Open dialog
+            this.showTableDialog = true;
         },
 
         handleTableClick(tableClicked) {

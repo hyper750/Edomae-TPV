@@ -65,6 +65,8 @@ export default {
     props: {
         local: Number,
         table: Object,
+        xCoordinates: Number,
+        yCoordinates: Number,
     },
 
     components: {
@@ -118,12 +120,11 @@ export default {
                 local: this.local,
                 number: this.number,
                 number_of_persons: this.numberOfPersons,
-                x_coordinates: 0.0,
-                y_coordinates: 0.0,
             };
 
             // Update
             if (this.table) {
+                // Update coordinates using drag and drop
                 await TableEndpoints.put(this.table.id, tableUpdate).catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
@@ -133,6 +134,9 @@ export default {
             }
             // Create
             else {
+                // Only set coordinates when creating the table
+                tableUpdate.x_coordinates = this.xCoordinates;
+                tableUpdate.y_coordinates =  this.yCoordinates;
                 await TableEndpoints.post(tableUpdate).catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
