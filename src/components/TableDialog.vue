@@ -136,7 +136,7 @@ export default {
             else {
                 // Only set coordinates when creating the table
                 tableUpdate.x_coordinates = this.xCoordinates;
-                tableUpdate.y_coordinates =  this.yCoordinates;
+                tableUpdate.y_coordinates = this.yCoordinates;
                 await TableEndpoints.post(tableUpdate).catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",

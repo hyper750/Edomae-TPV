@@ -37,6 +37,7 @@
                     :style="{
                         'background-image': `url(${getSelectedLocal.imatge})`,
                     }"
+                    ref="localImatge"
                 >
                     <span
                         v-for="table in tables"
@@ -44,8 +45,8 @@
                         class="table-item"
                         :class="{ disabledOpacity: !table.enabled }"
                         :style="{
-                            top: table.y_coordinates,
-                            left: table.x_coordinates,
+                            top: getYCoordinates(table.y_coordinates),
+                            left: getXCoordinates(table.x_coordinates),
                         }"
                         @click="() => handleTableClick(table)"
                     />
@@ -190,6 +191,20 @@ export default {
         deleteTableDialog() {
             this.closeTableDialog();
             this.onLocalChange(this.selectedLocal);
+        },
+
+        getYCoordinates(yCoordinates) {
+            const imatgeHeight = 64;
+            const elementHeight = this.$refs.localImatge.offsetHeight;
+            const position = ((yCoordinates * elementHeight) / 100) - (imatgeHeight / 2);
+            return `${position}px`;
+        },
+
+        getXCoordinates(xCoordinates) {
+            const imatgeWidth = 64;
+            const elementWidth = this.$refs.localImatge.offsetWidth;
+            const position =  ((xCoordinates * elementWidth) / 100) - (imatgeWidth / 2);
+            return `${position}px`;
         },
     },
 };
