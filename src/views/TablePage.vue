@@ -60,6 +60,7 @@
 .local-item {
     height: 750px;
     background-position: center center;
+    background-size: contain;
 }
 
 .table-item {
