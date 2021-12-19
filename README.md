@@ -5,6 +5,9 @@
 npm install
 ```
 
+## Environment variables
+- `VUE_APP_API_URL`: Url of the api, eg: https://localhost
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
