@@ -29,13 +29,13 @@
             />
         </v-dialog>
 
-        <v-row v-if="selectedLocal">
+        <v-row v-show="selectedLocal">
             <v-col md="12">
                 <div
                     @dblclick="handleLocalClicked"
                     class="local-item"
                     :style="{
-                        'background-image': `url(${getSelectedLocal.imatge})`,
+                        'background-image': `url(${getSelectedLocalImatge})`,
                     }"
                     ref="localImatge"
                 >
@@ -94,10 +94,10 @@ export default {
         return {
             locals: [],
             selectedLocal: null,
+            
             tables: [],
-
-            showTableDialog: false,
             selectedTable: null,
+            showTableDialog: false,
 
             xCoordinates: null,
             yCoordinates: null,
@@ -121,6 +121,11 @@ export default {
         getSelectedLocal() {
             return this.locals.find(({ id }) => this.selectedLocal === id);
         },
+
+        getSelectedLocalImatge() {
+            const selectedLocal = this.getSelectedLocal;
+            return (selectedLocal) ? selectedLocal.imatge : '';
+        }
     },
 
     methods: {
