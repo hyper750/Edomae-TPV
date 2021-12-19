@@ -150,7 +150,12 @@ export default {
         onLocalChange(newValue) {
             // Load table for that local
             TableEndpoints.list({ local: newValue })
-                .then(({ data }) => (this.tables = data))
+                .then(({ data }) => {
+                    // Set small timeout to avoid to draw the tables when there are transitions in progress
+                    setTimeout(() => {
+                        this.tables = data;
+                    }, 100);
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
