@@ -64,11 +64,11 @@
 }
 
 .table-item {
-    position: relative;
-    display: inline-block;
+    position: absolute;
     height: 64px;
     width: 64px;
     background-size: contain;
+    background-position: center center;
     background-image: url("@/assets/diningTableWhite.png");
     cursor: pointer;
 }
@@ -205,17 +205,20 @@ export default {
         },
 
         getYCoordinates(yCoordinates) {
-            const imatgeHeight = 64;
-            const elementHeight = this.$refs.localImatge.offsetHeight;
-            const position = ((yCoordinates * elementHeight) / 100) - (imatgeHeight / 2);
-            return `${position}px`;
+            // const imatgeHeight = 64;
+            // const elementHeight = this.$refs.localImatge.offsetHeight;
+            // const position = ((yCoordinates * elementHeight) / 100) - (imatgeHeight / 2);
+            return `${yCoordinates}%`;
         },
 
         getXCoordinates(xCoordinates) {
             const imatgeWidth = 64;
             const elementWidth = this.$refs.localImatge.offsetWidth;
+            // Convert percentage to px, and remove the 1/2 of the imatge height
             const position =  ((xCoordinates * elementWidth) / 100) - (imatgeWidth / 2);
-            return `${position}px`;
+            // Convert it to %
+            const positionPercentage = (position / elementWidth) * 100;
+            return `${positionPercentage}%`;
         },
     },
 };
