@@ -49,6 +49,8 @@
                             left: getXCoordinates(table.x_coordinates),
                         }"
                         @click="() => handleTableClick(table)"
+                        draggable
+                        @dragend="(event) => endDragTable(event, table)"
                     />
                 </div>
             </v-col>
@@ -94,7 +96,7 @@ export default {
         return {
             locals: [],
             selectedLocal: null,
-            
+
             tables: [],
             selectedTable: null,
             showTableDialog: false,
@@ -124,8 +126,8 @@ export default {
 
         getSelectedLocalImatge() {
             const selectedLocal = this.getSelectedLocal;
-            return (selectedLocal) ? selectedLocal.imatge : '';
-        }
+            return selectedLocal ? selectedLocal.imatge : "";
+        },
     },
 
     methods: {
@@ -215,10 +217,56 @@ export default {
             const imatgeWidth = 64;
             const elementWidth = this.$refs.localImatge.offsetWidth;
             // Convert percentage to px, and remove the 1/2 of the imatge height
-            const position =  ((xCoordinates * elementWidth) / 100) - (imatgeWidth / 2);
+            const position =
+                (xCoordinates * elementWidth) / 100 - imatgeWidth / 2;
             // Convert it to %
             const positionPercentage = (position / elementWidth) * 100;
             return `${positionPercentage}%`;
+        },
+
+        async endDragTable(event, table) {
+            // Local imatge size
+            const imatgeLocal = this.$refs.localImatge;
+            const elementWidth = imatgeLocal.offsetWidth;
+            const elementHeight = imatgeLocal.offsetHeight;
+
+            // Get real px
+            const tablePxCoordinates = {
+                x: (table.x_coordinates * elementWidth) / 100,
+                y: (table.y_coordinates * elementHeight) / 100,
+            };
+
+            const rect = event.target.getBoundingClientRect();
+            // Get coordinates
+            const draggedPx = {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top,
+            };
+
+            // Add dragged px to the original table px
+            tablePxCoordinates.x += draggedPx.x;
+            tablePxCoordinates.y += draggedPx.y;
+
+            // Relation position
+            const relation = {
+                x: (tablePxCoordinates.x / elementWidth) * 100,
+                y: (tablePxCoordinates.y / elementHeight) * 100,
+            };
+
+            console.log(`From Y ${table.y_coordinates} to ${relation.y}`);
+            console.log(`From X ${table.x_coordinates} to ${relation.x}`);
+
+            await TableEndpoints.put(table.id, {
+                x_coordinates: relation.x,
+                y_coordinates: relation.y,
+            }).catch(() =>
+                this.$store.dispatch(
+                    "setGlobalError",
+                    this.$i18n.t("Can't update the table")
+                )
+            );
+
+            await this.onLocalChange(this.selectedLocal);
         },
     },
 };
