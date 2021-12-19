@@ -50,6 +50,7 @@
                         }"
                         @click="() => handleTableClick(table)"
                         draggable
+                        @dragstart="(event) => startDragTable(event)"
                         @dragend="(event) => endDragTable(event, table)"
                     />
                 </div>
@@ -103,6 +104,9 @@ export default {
 
             xCoordinates: null,
             yCoordinates: null,
+
+            startDragXCoordinates: null,
+            startDragYCoordinates: null,
         };
     },
 
@@ -224,6 +228,12 @@ export default {
             return `${positionPercentage}%`;
         },
 
+        startDragTable(event) {
+            const rect = event.target.getBoundingClientRect();
+            this.startDragXCoordinates = event.clientX - rect.left;
+            this.startDragYCoordinates = event.clientY - rect.top;
+        },
+
         async endDragTable(event, table) {
             // Local imatge size
             const imatgeLocal = this.$refs.localImatge;
@@ -244,17 +254,15 @@ export default {
             };
 
             // Add dragged px to the original table px
-            tablePxCoordinates.x += draggedPx.x;
-            tablePxCoordinates.y += draggedPx.y;
+            // Minus the original cursor position inside the table
+            tablePxCoordinates.x += draggedPx.x - this.startDragXCoordinates;
+            tablePxCoordinates.y += draggedPx.y - this.startDragYCoordinates;
 
             // Relation position
             const relation = {
                 x: (tablePxCoordinates.x / elementWidth) * 100,
                 y: (tablePxCoordinates.y / elementHeight) * 100,
             };
-
-            console.log(`From Y ${table.y_coordinates} to ${relation.y}`);
-            console.log(`From X ${table.x_coordinates} to ${relation.x}`);
 
             await TableEndpoints.put(table.id, {
                 x_coordinates: relation.x,
