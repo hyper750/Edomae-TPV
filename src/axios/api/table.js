@@ -1,4 +1,5 @@
 import { getApiWithLogin } from "../axios";
+import AxiosHelper from "../helper";
 
 export default {
     ENDPOINT: "/table",
@@ -28,17 +29,14 @@ export default {
     async put(id, table) {
         const { enabled, number, local, number_of_persons, x_coordinates, y_coordinates } = table;
         
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('number', number);
         formData.append('local', local);
         formData.append('number_of_persons', number_of_persons);
-        if(x_coordinates) {
-            formData.append('x_coordinates', x_coordinates);
-        }
-        if(y_coordinates) {
-            formData.append('y_coordinates', y_coordinates);
-        }
+        formData.append('x_coordinates', x_coordinates);
+        formData.append('y_coordinates', y_coordinates);
+        formData = AxiosHelper.removeOptionalValues(formData);
 
         return await getApiWithLogin().put(`${this.ENDPOINT}/${id}`, formData)
     },
