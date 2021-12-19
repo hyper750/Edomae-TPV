@@ -17,7 +17,7 @@
             </v-col>
         </v-row>
 
-        <v-dialog v-model="showTableDialog">
+        <v-dialog v-model="showTableDialog" eager>
             <TableDialog
                 :table="selectedTable"
                 :local="selectedLocal"
