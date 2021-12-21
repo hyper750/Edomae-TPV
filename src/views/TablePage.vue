@@ -63,24 +63,6 @@
     </v-container>
 </template>
 
-<style scoped>
-.local-item {
-    height: 750px;
-    background-position: center center;
-    background-size: contain;
-}
-
-.table-item {
-    position: absolute;
-    height: 64px;
-    width: 64px;
-    background-size: contain;
-    background-position: center center;
-    background-image: url("@/assets/diningTableWhite.png");
-    cursor: pointer;
-}
-</style>
-
 <script>
 import BreadCrumb from "../components/BreadCrumb";
 import TableDialog from "../components/TableDialog";
