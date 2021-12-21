@@ -177,18 +177,18 @@ export default {
             // Relative coordinates and not absolute
             const pxCoordinates = {
                 x: event.clientX - rect.left,
-                y: event.clientY - rect.top
+                y: event.clientY - rect.top,
             };
-            
+
             const localImatgeSize = {
                 width: event.currentTarget.offsetWidth,
-                height: event.currentTarget.offsetHeight
+                height: event.currentTarget.offsetHeight,
             };
-            
+
             // Percentage of coordinates inside the imatge
             const relation = {
                 x: (pxCoordinates.x / localImatgeSize.width) * 100,
-                y: (pxCoordinates.y / localImatgeSize.height) * 100
+                y: (pxCoordinates.y / localImatgeSize.height) * 100,
             };
 
             // Set coordinates
@@ -219,10 +219,11 @@ export default {
         },
 
         getYCoordinates(yCoordinates) {
-            // const imatgeHeight = 64;
-            // const elementHeight = this.$refs.localImatge.offsetHeight;
-            // const position = ((yCoordinates * elementHeight) / 100) - (imatgeHeight / 2);
-            return `${yCoordinates}%`;
+            const imatgeHeight = 64;
+            const elementHeight = this.$refs.localImatge.offsetHeight;
+            const position =
+                (yCoordinates * elementHeight) / 100 - imatgeHeight / 2;
+            return `${position}px`;
         },
 
         getXCoordinates(xCoordinates) {
@@ -232,8 +233,8 @@ export default {
             const position =
                 (xCoordinates * elementWidth) / 100 - imatgeWidth / 2;
             // Convert it to %
-            const positionPercentage = (position / elementWidth) * 100;
-            return `${positionPercentage}%`;
+            // const positionPercentage = (position / elementWidth) * 100;
+            return `${position}px`;
         },
 
         startDragTable(event) {
