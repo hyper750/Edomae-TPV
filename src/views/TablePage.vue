@@ -42,7 +42,7 @@
                     <span
                         v-for="table in tables"
                         :key="table.id"
-                        class="table-item"
+                        class="table-item text-center"
                         :class="{ disabledOpacity: !table.enabled }"
                         :style="{
                             top: getYCoordinates(table.y_coordinates),
@@ -52,7 +52,11 @@
                         draggable
                         @dragstart="(event) => startDragTable(event)"
                         @dragend="(event) => endDragTable(event, table)"
-                    />
+                    >
+                        <span class="green--text font-weight-bold white rounded-circle">
+                            {{ table.number }}
+                        </span>
+                    </span>
                 </div>
             </v-col>
         </v-row>
