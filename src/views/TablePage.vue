@@ -32,7 +32,7 @@
         <v-row v-show="selectedLocal">
             <v-col md="12">
                 <div
-                    @dblclick="handleLocalClicked"
+                    @dblclick="(event) => handleLocalClicked(event)"
                     class="local-item"
                     :style="{
                         'background-image': `url(${getSelectedLocalImatge})`,
@@ -174,18 +174,26 @@ export default {
             this.selectedTable = null;
             const rect = event.target.getBoundingClientRect();
 
-            const xCoordinates = event.clientX - rect.left;
-            const yCoordinates = event.clientY - rect.top;
-
-            const elementWidth = event.currentTarget.offsetWidth;
-            const elementHeight = event.currentTarget.offsetHeight;
-
-            const yRelation = (yCoordinates / elementHeight) * 100;
-            const xRelation = (xCoordinates / elementWidth) * 100;
+            // Relative coordinates and not absolute
+            const pxCoordinates = {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+            
+            const localImatgeSize = {
+                width: event.currentTarget.offsetWidth,
+                height: event.currentTarget.offsetHeight
+            };
+            
+            // Percentage of coordinates inside the imatge
+            const relation = {
+                x: (pxCoordinates.x / localImatgeSize.width) * 100,
+                y: (pxCoordinates.y / localImatgeSize.height) * 100
+            };
 
             // Set coordinates
-            this.xCoordinates = xRelation;
-            this.yCoordinates = yRelation;
+            this.xCoordinates = relation.x;
+            this.yCoordinates = relation.y;
 
             // Open dialog
             this.showTableDialog = true;
