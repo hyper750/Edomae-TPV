@@ -35,6 +35,7 @@
                             top: getYCoordinates(table.y_coordinates),
                             left: getXCoordinates(table.x_coordinates),
                         }"
+                        @click="(event) => tableClicked(event, table)"
                     >
                         <span
                             class="
@@ -50,6 +51,10 @@
                 </div>
             </v-col>
         </v-row>
+
+        <v-dialog v-model="openCommandDialog" @click:outside="onCommandDialogClose">
+            <CommandDialog @close="onCommandDialogClose" />
+        </v-dialog>
     </v-container>
 </template>
 
@@ -57,10 +62,12 @@
 import BreadCrumb from "../components/BreadCrumb.vue";
 import LocalEndpoints from "../axios/api/local";
 import TableEndpoints from "../axios/api/table";
+import CommandDialog from "../components/CommandDialog.vue";
 
 export default {
     components: {
         BreadCrumb,
+        CommandDialog,
     },
 
     mounted() {
@@ -73,6 +80,9 @@ export default {
             selectedLocal: null,
 
             tables: [],
+
+            openCommandDialog: false,
+            selectedTable: null,
         };
     },
 
@@ -145,6 +155,15 @@ export default {
             // Convert it to %
             // const positionPercentage = (position / elementWidth) * 100;
             return `${position}px`;
+        },
+
+        tableClicked(event, table) {
+            this.selectedTable = table.id;
+            this.openCommandDialog = true;
+        },
+
+        onCommandDialogClose() {
+            this.selectedTable = null;
         },
     },
 };
