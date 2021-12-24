@@ -119,6 +119,10 @@ export default {
             this.order = newValue.order;
             // this.imatge = newValue.imatge;
         },
+
+        lastMealCategoryOrder: function(newValue) {
+            this.order = newValue + 1;
+        },
     },
 
     methods: {
