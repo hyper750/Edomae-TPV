@@ -19,6 +19,25 @@
 
 <script>
 export default {
-    
+    props: {
+        table: Number,
+    },
+
+    watch: {
+        table: function(newValue) {
+            this.loadCommand(newValue);
+        }
+    },
+
+    methods: {
+        loadCommand(tableId) {
+            // Default value is null
+            if(!tableId) {
+                return;
+            }
+
+            // Check if there's a command already on that table
+        },
+    },
 };
 </script>
