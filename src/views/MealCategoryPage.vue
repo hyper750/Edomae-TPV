@@ -88,6 +88,11 @@ export default {
     computed: {
         getLastMealCategoryOrder() {
             const orders = this.mealCategories.map(({ order }) => order);
+
+            if(orders.length === 0) {
+                return 0;
+            }
+
             return Math.max(...orders);
         }
     },

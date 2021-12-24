@@ -83,8 +83,13 @@ export default {
 
     computed: {
         getLastMealOrder() {
-            const order = this.meals.map(({ order }) => order);
-            return Math.max(...order);
+            const orders = this.meals.map(({ order }) => order);
+
+            if(orders.length === 0) {
+                return 0;
+            }
+
+            return Math.max(...orders);
         },
     },
 
