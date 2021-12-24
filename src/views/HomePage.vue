@@ -53,7 +53,7 @@
         </v-row>
 
         <v-dialog v-model="openCommandDialog" @click:outside="onCommandDialogClose">
-            <CommandDialog @close="onCommandDialogClose" />
+            <CommandDialog @close="onCommandDialogClose" :table="selectedTable" />
         </v-dialog>
     </v-container>
 </template>
