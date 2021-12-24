@@ -8,7 +8,7 @@
 
         <v-row>
             <v-col cols="12">
-                <v-dialog v-model="showCreateDialog">
+                <v-dialog v-model="showCreateDialog" @click:outside="resetCreateDialog">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="success" v-on="on" v-bind="attrs">
                             <svg
@@ -27,6 +27,7 @@
                         </v-btn>
                     </template>
                     <PaymentMethodDialog
+                        ref="paymentMethodCreateDialog"
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
                     />
@@ -121,6 +122,10 @@ export default {
         setLastPaymentMethod(paymentMethod) {
             this.showUpdateDialog = true;
             this.lastPaymentMethod = paymentMethod;
+        },
+
+        resetCreateDialog() {
+            this.$refs.paymentMethodCreateDialog.close();
         },
     },
 };
