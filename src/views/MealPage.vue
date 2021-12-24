@@ -8,7 +8,7 @@
 
         <v-row>
             <v-col cols="12">
-                <v-dialog v-model="showCreateDialog">
+                <v-dialog v-model="showCreateDialog" @click:outside="resetCreateMealDialog">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="success" v-on="on" v-bind="attrs">
                             <svg
@@ -27,6 +27,7 @@
                         </v-btn>
                     </template>
                     <MealDialog
+                        ref="createMealDialog"
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
                     />
@@ -117,6 +118,10 @@ export default {
         deleteObjectDialog() {
             this.closeUpdateDialog();
             this.loadMeal();
+        },
+
+        resetCreateMealDialog() {
+            this.$refs.createMealDialog.close();
         },
     },
 };
