@@ -100,6 +100,11 @@ export default {
 
     methods: {
         resetForms() {
+            // Reset form attributes only if is create mode
+            if(this.paymentMethod) {
+                return;
+            }
+
             this.enabled = true;
             this.name = "";
             this.image = null;

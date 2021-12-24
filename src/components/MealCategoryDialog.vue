@@ -120,6 +120,10 @@ export default {
 
     methods: {
         resetForm() {
+            // Reset form attributes only if is create mode
+            if(this.mealCategory) {
+                return;
+            }
             this.enabled = true;
             this.name = "";
             this.order = 1;

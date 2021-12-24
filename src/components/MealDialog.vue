@@ -172,6 +172,11 @@ export default {
 
     methods: {
         resetForm() {
+            // Reset form attributes only if is create mode
+            if(this.meal) {
+                return;
+            }
+
             this.enabled = true;
             this.name = "";
             this.description = "";
