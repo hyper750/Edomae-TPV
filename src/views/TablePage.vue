@@ -20,6 +20,7 @@
         <v-dialog v-model="showTableDialog" eager @click:outside="resetTableDialog">
             <TableDialog
                 ref="tableDialog"
+                :lastTableNumber="getLastTableNumber"
                 :table="selectedTable"
                 :local="selectedLocal"
                 :xCoordinates="xCoordinates"
@@ -118,6 +119,16 @@ export default {
         getSelectedLocalImatge() {
             const selectedLocal = this.getSelectedLocal;
             return selectedLocal ? selectedLocal.imatge : "";
+        },
+
+        getLastTableNumber() {
+            const numbers = this.tables.map(({ number }) => number);
+
+            if(numbers.length === 0) {
+                return 0;
+            }
+
+            return Math.max(...numbers);
         },
     },
 

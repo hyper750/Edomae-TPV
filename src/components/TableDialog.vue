@@ -67,6 +67,7 @@ export default {
         table: Object,
         xCoordinates: Number,
         yCoordinates: Number,
+        lastTableNumber: Number
     },
 
     components: {
@@ -77,7 +78,7 @@ export default {
         return {
             enabled: true,
 
-            number: 1,
+            number: this.getDefaultNumber(),
             numberRules: [
                 (f) => f.length !== 0 || this.$t("Put a table number"),
                 (f) =>
@@ -101,6 +102,10 @@ export default {
                 this.numberOfPersons = newValue.number_of_persons;
             }
         },
+
+        lastTableNumber: function(newValue) {
+            this.number = newValue + 1;
+        },
     },
 
     methods: {
@@ -111,7 +116,7 @@ export default {
             }
 
             this.enabled = true;
-            this.number = 1;
+            this.number = this.getDefaultNumber();
             this.numberOfPersons = 1;
         },
         close() {
@@ -172,6 +177,10 @@ export default {
         async acceptConfirmDialog() {
             this.closeConfirmDialog();
             await this.deleteObject();
+        },
+
+        getDefaultNumber() {
+            return (this.lastTableNumber)? this.lastTableNumber + 1 : 1;
         },
     },
 };
