@@ -27,6 +27,7 @@
                         </v-btn>
                     </template>
                     <MealDialog
+                        :lastMealOrder="getLastMealOrder"
                         ref="createMealDialog"
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
@@ -78,6 +79,13 @@ export default {
             showUpdateDialog: false,
             updateMeal: null,
         };
+    },
+
+    computed: {
+        getLastMealOrder() {
+            const order = this.meals.map(({ order }) => order);
+            return Math.max(...order);
+        },
     },
 
     methods: {

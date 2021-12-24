@@ -96,6 +96,7 @@ import MealCategoryEndpoints from "../axios/api/mealCategory";
 export default {
     props: {
         meal: Object,
+        lastMealOrder: Number,
     },
 
     components: {
@@ -126,7 +127,7 @@ export default {
                     this.$t("At least a character is required"),
             ],
 
-            order: 1,
+            order: this.getDefaultOrder(),
             orderRules: [
                 (f) => f.length !== 0 || this.$t("Put an order for the meal"),
             ],
@@ -168,9 +169,16 @@ export default {
             this.price = newValue.price;
             this.category = newValue.category;
         },
+        lastMealOrder: function(newValue) {
+            this.order = newValue + 1;
+        }
     },
 
     methods: {
+        getDefaultOrder() {
+            return (this.lastMealOrder)? this.lastMealOrder + 1 : 1;
+        },
+        
         resetForm() {
             // Reset form attributes only if is create mode
             if(this.meal) {
@@ -180,7 +188,7 @@ export default {
             this.enabled = true;
             this.name = "";
             this.description = "";
-            this.order = 1;
+            this.order = this.getDefaultOrder();
             this.imatge = null;
             this.price = "1.0";
             this.category = null;
