@@ -105,6 +105,11 @@ export default {
 
     methods: {
         resetForm() {
+            // Only reset form attributes if is create mode
+            if(this.table) {
+                return;
+            }
+
             this.enabled = true;
             this.number = 1;
             this.numberOfPersons = 1;
