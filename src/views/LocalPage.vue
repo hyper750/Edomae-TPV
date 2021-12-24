@@ -8,7 +8,7 @@
 
         <v-row>
             <v-col cols="12">
-                <v-dialog v-model="showCreateDialog">
+                <v-dialog v-model="showCreateDialog" @click:outside="resetCreateLocalDialog">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="success" v-on="on" v-bind="attrs">
                             <svg
@@ -27,6 +27,7 @@
                         </v-btn>
                     </template>
                     <LocalDialog
+                        ref="localCreateDialog"
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
                     />
@@ -122,6 +123,10 @@ export default {
             this.updateLocal = local;
             this.showUpdateDialog = true;
         },
+
+        resetCreateLocalDialog() {
+            this.$refs.localCreateDialog.close();
+        }
     },
 };
 </script>
