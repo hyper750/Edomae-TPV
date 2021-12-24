@@ -74,6 +74,9 @@ export default {
         mealCategory: {
             type: Object,
         },
+        lastMealCategoryOrder: {
+            type: Number
+        }
     },
 
     components: {
@@ -94,7 +97,7 @@ export default {
                     this.$t("At least a character is required"),
             ],
 
-            order: 1,
+            order: this.getDefaultOrder(),
             orderRules: [
                 (f) =>
                     f.length !== 0 || this.$t("Put an order for the category"),
@@ -119,6 +122,10 @@ export default {
     },
 
     methods: {
+        getDefaultOrder() {
+            return (this.lastMealCategoryOrder)? this.lastMealCategoryOrder + 1 : 1;
+        },
+
         resetForm() {
             // Reset form attributes only if is create mode
             if(this.mealCategory) {
@@ -126,7 +133,7 @@ export default {
             }
             this.enabled = true;
             this.name = "";
-            this.order = 1;
+            this.order = this.getDefaultOrder();
             this.imatge = null;
         },
 

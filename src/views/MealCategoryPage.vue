@@ -28,6 +28,7 @@
                     </template>
                     <MealCategoryDialog
                         ref="mealCategoryCreateDialog"
+                        :lastMealCategoryOrder="getLastMealCategoryOrder"
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
                     />
@@ -82,6 +83,13 @@ export default {
 
     mounted() {
         this.loadMealCategory();
+    },
+
+    computed: {
+        getLastMealCategoryOrder() {
+            const orders = this.mealCategories.map(({ order }) => order);
+            return Math.max(...orders);
+        }
     },
 
     methods: {
