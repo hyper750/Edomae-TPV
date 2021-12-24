@@ -17,8 +17,9 @@
             </v-col>
         </v-row>
 
-        <v-dialog v-model="showTableDialog" eager>
+        <v-dialog v-model="showTableDialog" eager @click:outside="resetTableDialog">
             <TableDialog
+                ref="tableDialog"
                 :table="selectedTable"
                 :local="selectedLocal"
                 :xCoordinates="xCoordinates"
@@ -188,6 +189,10 @@ export default {
         handleTableClick(tableClicked) {
             this.selectedTable = tableClicked;
             this.showTableDialog = true;
+        },
+
+        resetTableDialog() {
+            this.$refs.tableDialog.close();
         },
 
         closeTableDialog() {

@@ -110,6 +110,7 @@ export default {
             this.numberOfPersons = 1;
         },
         close() {
+            console.log('close');
             this.resetForm();
             this.$emit("close");
         },
