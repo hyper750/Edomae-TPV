@@ -29,6 +29,51 @@
                 </v-hover>
             </v-col>
         </v-row>
+
+        <!-- Select meal -->
+        <v-row v-else>
+            <v-col md="12">
+                <v-btn text @click="() => setSelectedCategories(null)">
+                    <v-icon>
+                        mdi-chevron-left
+                    </v-icon>
+                    {{ $t("Meal categories") }}
+                </v-btn>
+            </v-col>
+            <v-col md="3" v-for="meal in getMealByCategory" :key="meal.id">
+                <v-hover v-slot="{ hover }">
+                    <v-card
+                        class="cursor-pointer mb-4"
+                        :class="{
+                            'elevation-12': hover,
+                            'elevation-6': !hover,
+                        }"
+                    >
+                        <v-img
+                            :src="meal.imatge"
+                            height="150"
+                            :class="{ disabledOpacity: !meal.enabled }"
+                        />
+
+                        <v-card-title>
+                            <v-row no-gutters>
+                                <v-col cols="10">
+                                    {{ meal.name }}
+                                </v-col>
+                                <v-col cols="2 text-right">
+                                    {{ meal.price }}&euro;
+                                </v-col>
+                            </v-row>
+                        </v-card-title>
+                        <v-card-text>
+                            <div>
+                                {{ meal.description }}
+                            </div>
+                        </v-card-text>
+                    </v-card>
+                </v-hover>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
@@ -69,6 +114,10 @@ export default {
     methods: {
         selectCategory(category) {
             this.selectedCategory = category.id;
+        },
+
+        setSelectedCategories(category) {
+            this.selectedCategory = category;
         },
     },
 };
