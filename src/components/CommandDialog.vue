@@ -14,6 +14,9 @@
                             class="elevation-1"
                         />
                     </v-col>
+                    <v-col md="6">
+                        <MenuMeals :meals="mealsMenu" />
+                    </v-col>
                 </v-row>
             </v-container>
         </v-card-text>
@@ -24,11 +27,16 @@
 import MealEndpoints from "../axios/api/meal";
 import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
+import MenuMeals from "../components/MenuMeals";
 
 export default {
     props: {
         table: Number,
         deliveryCommand: Boolean,
+    },
+
+    components: {
+        MenuMeals,
     },
 
     data() {
