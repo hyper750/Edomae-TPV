@@ -58,6 +58,10 @@ export default {
                     text: this.$i18n.t("Discount"),
                     value: "discount",
                 },
+                {
+                    text: this.$i18n.t("Total"),
+                    value: "total",
+                },
             ],
         };
     },
@@ -89,6 +93,13 @@ export default {
 
                 // Get price of the meal
                 commandMeal.price = `${meal.price}€`;
+
+                // Add total price
+                commandMeal.total = `${this.getTotalPrice(
+                    meal.price,
+                    commandMeal.number,
+                    commandMeal.discount
+                )}€`;
             });
             return commandMeals;
         },
@@ -160,6 +171,11 @@ export default {
                         this.$i18.t("Can't load table command")
                     )
                 );
+        },
+
+        getTotalPrice(price, quantity, discount) {
+            const currentDiscount = discount ? 1 - discount / 100 : 1;
+            return price * quantity * currentDiscount;
         },
     },
 };
