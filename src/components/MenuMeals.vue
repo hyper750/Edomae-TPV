@@ -48,6 +48,7 @@
                             'elevation-12': hover,
                             'elevation-6': !hover,
                         }"
+                        @click="() => selectMeal(meal)"
                     >
                         <v-img
                             :src="meal.imatge"
@@ -118,6 +119,10 @@ export default {
 
         setSelectedCategories(category) {
             this.selectedCategory = category;
+        },
+
+        selectMeal(meal) {
+            // TODO:
         },
     },
 };
