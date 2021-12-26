@@ -10,22 +10,20 @@
                     <v-col md="6">
                         <v-data-table
                             :headers="commandMealsHeaders"
-                            :items="commandMeals"
+                            :items="getCommandMeals"
                             class="elevation-1"
                         />
                     </v-col>
                 </v-row>
             </v-container>
         </v-card-text>
-
-        <v-card-actions> </v-card-actions>
     </v-card>
 </template>
 
 <script>
 import MealEndpoints from "../axios/api/meal";
 import CommandEndpoints from "../axios/api/command";
-// import CommandMealEndpoints from "../axios/api/commandMeal";
+import CommandMealEndpoints from "../axios/api/commandMeal";
 
 export default {
     props: {
@@ -48,12 +46,16 @@ export default {
                     text: this.$i18n.t("Quantity"),
                     value: "number",
                 },
+                // {
+                //     text: this.$i18n.t("Price"),
+                //     value: 'price'
+                // },
                 {
                     text: this.$i18n.t("Extras"),
                     value: "extra",
                 },
                 {
-                    discount: this.$i18n.t("Discount"),
+                    text: this.$i18n.t("Discount"),
                     value: "discount",
                 },
             ],
@@ -74,6 +76,18 @@ export default {
         },
     },
 
+    computed: {
+        getCommandMeals() {
+            const commandMeals = [...this.commandMeals];
+            
+            commandMeals.map((commandMeal) => {
+                // Get meal name from the menu
+                commandMeal.name = this.mealsMenu.find(({id}) => id === commandMeal.meal).name;
+            });
+            return commandMeals;
+        },
+    },
+
     methods: {
         async loadMenu() {
             await MealEndpoints.list({ enabled: true })
@@ -86,13 +100,36 @@ export default {
                 );
         },
 
-        async loadCommandMeal() {},
+        async loadCommandMeal(commandId) {
+            const filters = {
+                command: commandId,
+            };
+
+            CommandMealEndpoints.list(filters)
+                .then(({ data }) => {
+                    this.commandMeals = data;
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't load command meal")
+                    )
+                );
+        },
 
         async loadCommand(tableId, deliveryCommand) {
             if (tableId && !deliveryCommand) {
-                this.loadTableCommand(tableId);
+                await this.loadTableCommand(tableId);
             } else if (!tableId && deliveryCommand) {
                 // TODO: Load delivery command
+            }
+
+            // Reset command meals if there's no command available
+            if(!this.command) {
+                this.commandMeals = [];
+            }
+            else {
+                this.loadCommandMeal(this.command.id);
             }
         },
 
@@ -103,13 +140,12 @@ export default {
                 // Already unpaid, running on that table
                 paid: false,
             };
-            
+
             await CommandEndpoints.list(filters)
                 .then(({ data }) => {
-                    if(data.length === 0) {
+                    if (data.length === 0) {
                         this.command = null;
-                    }
-                    else {
+                    } else {
                         this.command = data[0];
                     }
                 })
