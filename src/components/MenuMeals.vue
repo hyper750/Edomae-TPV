@@ -123,6 +123,7 @@ export default {
 
         selectMeal(meal) {
             // TODO:
+            console.log(meal);
         },
     },
 };
