@@ -31,7 +31,7 @@ export default {
     async put(id, command) {
         const { table, table_name, is_home_delivery, delivery_address, discount, extra, paid, payment_method } = command;
 
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('table', table);
         formData.append('table_name', table_name);
         formData.append('is_home_delivery', is_home_delivery);

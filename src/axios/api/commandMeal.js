@@ -30,7 +30,7 @@ export default {
     async put(id, commandMeal) {
         const { command, meal, number, extra, discount } = commandMeal;
 
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('command', command);
         formData.append('meal', meal);
         formData.append('number', number);
