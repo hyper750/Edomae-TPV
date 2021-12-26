@@ -46,10 +46,10 @@ export default {
                     text: this.$i18n.t("Quantity"),
                     value: "number",
                 },
-                // {
-                //     text: this.$i18n.t("Price"),
-                //     value: 'price'
-                // },
+                {
+                    text: this.$i18n.t("Price"),
+                    value: "price",
+                },
                 {
                     text: this.$i18n.t("Extras"),
                     value: "extra",
@@ -79,10 +79,16 @@ export default {
     computed: {
         getCommandMeals() {
             const commandMeals = [...this.commandMeals];
-            
+
             commandMeals.map((commandMeal) => {
+                const meal = this.mealsMenu.find(
+                    ({ id }) => id === commandMeal.meal
+                );
                 // Get meal name from the menu
-                commandMeal.name = this.mealsMenu.find(({id}) => id === commandMeal.meal).name;
+                commandMeal.name = meal.name;
+
+                // Get price of the meal
+                commandMeal.price = `${meal.price}€`;
             });
             return commandMeals;
         },
@@ -125,10 +131,9 @@ export default {
             }
 
             // Reset command meals if there's no command available
-            if(!this.command) {
+            if (!this.command) {
                 this.commandMeals = [];
-            }
-            else {
+            } else {
                 this.loadCommandMeal(this.command.id);
             }
         },
