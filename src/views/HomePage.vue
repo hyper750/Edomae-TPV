@@ -52,7 +52,7 @@
             </v-col>
         </v-row>
 
-        <v-dialog v-model="openCommandDialog" @click:outside="onCommandDialogClose">
+        <v-dialog v-model="openCommandDialog" @click:outside="onCommandDialogClose" eager>
             <CommandDialog @close="onCommandDialogClose" :table="selectedTable" />
         </v-dialog>
     </v-container>
