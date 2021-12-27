@@ -53,7 +53,7 @@
         </v-row>
 
         <v-dialog v-model="openCommandDialog" @click:outside="onCommandDialogClose" eager>
-            <CommandDialog @close="onCommandDialogClose" :table="selectedTable" />
+            <CommandDialog @close="onCommandDialogClose" :table="selectedTable" ref="commandDialog" />
         </v-dialog>
     </v-container>
 </template>
@@ -164,6 +164,7 @@ export default {
 
         onCommandDialogClose() {
             this.selectedTable = null;
+            this.$refs.commandDialog.reset();
         },
     },
 };

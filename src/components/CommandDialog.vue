@@ -15,7 +15,7 @@
                         />
                     </v-col>
                     <v-col md="6">
-                        <MenuMeals :meals="mealsMenu" />
+                        <MenuMeals :meals="mealsMenu" ref="menuMeals" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -184,6 +184,10 @@ export default {
         getTotalPrice(price, quantity, discount) {
             const currentDiscount = discount ? 1 - discount / 100 : 1;
             return price * quantity * currentDiscount;
+        },
+
+        reset() {
+            this.$refs.menuMeals.reset();
         },
     },
 };

@@ -125,6 +125,10 @@ export default {
             // TODO:
             console.log(meal);
         },
+
+        reset() {
+            this.selectedCategory = null;
+        },
     },
 };
 </script>
