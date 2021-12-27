@@ -124,6 +124,7 @@ export default {
         selectMeal(meal) {
             // TODO:
             console.log(meal);
+            // TODO: Show a dialog with the total number of articles to apply, extra and discount
         },
 
         reset() {
