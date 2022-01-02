@@ -34,9 +34,7 @@
         <v-row v-else>
             <v-col md="12">
                 <v-btn text @click="() => setSelectedCategories(null)">
-                    <v-icon>
-                        mdi-chevron-left
-                    </v-icon>
+                    <v-icon> mdi-chevron-left </v-icon>
                     {{ $t("Meal categories") }}
                 </v-btn>
             </v-col>
@@ -77,8 +75,16 @@
         </v-row>
 
         <!-- Select command meal -->
-        <v-dialog v-model="showMealCommandDialog" @click:outside="resetMealCommandDialog" width="unset">
-            <CommandMealDialog :meal="selectedMeal" :command="command" />
+        <v-dialog
+            v-model="showMealCommandDialog"
+            @click:outside="resetMealCommandDialog"
+            width="unset"
+        >
+            <CommandMealDialog
+                :meal="selectedMeal"
+                :command="command"
+                @close="resetMealCommandDialog"
+            />
         </v-dialog>
     </v-container>
 </template>
@@ -140,7 +146,7 @@ export default {
 
         selectMeal(meal) {
             // Create command if not exists
-            if(!this.command) {
+            if (!this.command) {
                 this.$emit("createCommand");
             }
             this.selectedMeal = meal;
@@ -152,6 +158,7 @@ export default {
         },
 
         resetMealCommandDialog() {
+            this.showMealCommandDialog = null;
             this.selectedMeal = null;
         },
     },
