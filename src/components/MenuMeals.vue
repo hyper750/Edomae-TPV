@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-0">
         <!-- Select a category -->
-        <v-row v-if="!selectedCategory">
+        <v-row v-if="mustShowCategory">
             <v-col
                 md="3"
                 v-for="mealCategory in categories"
@@ -75,21 +75,34 @@
                 </v-hover>
             </v-col>
         </v-row>
+
+        <!-- Select command meal -->
+        <v-dialog v-model="showMealCommandDialog" eager @click:outside="resetMealCommandDialog">
+            <CommandMealDialog :meal="selectedMeal" :command="command" />
+        </v-dialog>
     </v-container>
 </template>
 
 <script>
 import MealCategoryEndpoints from "../axios/api/mealCategory";
+import CommandMealDialog from "../components/CommandMealDialog";
 
 export default {
     props: {
         meals: Array,
+        command: Object,
+    },
+
+    components: {
+        CommandMealDialog,
     },
 
     data() {
         return {
             categories: [],
             selectedCategory: null,
+            selectedMeal: null,
+            showMealCommandDialog: false,
         };
     },
 
@@ -110,6 +123,10 @@ export default {
                 ({ category }) => category === this.selectedCategory
             );
         },
+
+        mustShowCategory() {
+            return !this.selectedCategory && !this.selectedMeal;
+        },
     },
 
     methods: {
@@ -122,13 +139,20 @@ export default {
         },
 
         selectMeal(meal) {
-            // TODO:
-            console.log(meal);
-            // TODO: Show a dialog with the total number of articles to apply, extra and discount
+            // Create command if not exists
+            if(!this.command) {
+                this.$emit("createCommand");
+            }
+            this.selectedMeal = meal;
+            this.showMealCommandDialog = true;
         },
 
         reset() {
             this.selectedCategory = null;
+        },
+
+        resetMealCommandDialog() {
+            this.selectedMeal = null;
         },
     },
 };

@@ -15,7 +15,12 @@
                         />
                     </v-col>
                     <v-col md="6">
-                        <MenuMeals :meals="mealsMenu" ref="menuMeals" />
+                        <MenuMeals
+                            :meals="mealsMenu"
+                            :command="command"
+                            ref="menuMeals"
+                            @createCommand="createCommand"
+                        />
                     </v-col>
                 </v-row>
             </v-container>
@@ -84,7 +89,7 @@ export default {
             this.loadCommand(newValue, this.deliveryCommand);
         },
         deliveryCommand: function (newValue) {
-            this.loadCommand(this.tableId, newValue);
+            this.loadCommand(null, newValue);
         },
     },
 
@@ -188,6 +193,21 @@ export default {
 
         reset() {
             this.$refs.menuMeals.reset();
+        },
+
+        async createCommand() {
+            const commandData = {
+                is_home_delivery: this.deliveryCommand,
+                table: this.table,
+            };
+            await CommandEndpoints.post(commandData)
+                .then(({ data }) => (this.command = data))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't create a command")
+                    )
+                );
         },
     },
 };
