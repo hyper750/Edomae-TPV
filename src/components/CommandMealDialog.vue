@@ -12,8 +12,9 @@
 
         <v-container fluid class="mt-2">
             <v-row>
-                <v-col md="12">
-                    <h3 class="text-center">{{ meal.name }}</h3>
+                <v-col md="12 text-center">
+                    <h3 class="d-inline ml-10">{{ meal.name }}</h3>
+                    <h4 class="d-inline float-right mr-1 mt-1">{{ meal.price }}&euro;</h4>
                 </v-col>
             </v-row>
         </v-container>
