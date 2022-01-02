@@ -77,7 +77,7 @@
         </v-row>
 
         <!-- Select command meal -->
-        <v-dialog v-model="showMealCommandDialog" eager @click:outside="resetMealCommandDialog">
+        <v-dialog v-model="showMealCommandDialog" @click:outside="resetMealCommandDialog" width="unset">
             <CommandMealDialog :meal="selectedMeal" :command="command" />
         </v-dialog>
     </v-container>
