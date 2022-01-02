@@ -91,7 +91,14 @@ export default {
     },
 
     methods: {
+        resetForm() {
+            this.number = 1;
+            this.extra = null;
+            this.discount = null;
+        },
+
         close() {
+            this.resetForm();
             this.$emit("close");
         },
 
@@ -111,6 +118,8 @@ export default {
                         this.$i18n.t("Can't add meal")
                     )
                 );
+            
+            this.resetForm();
         },
     },
 };
