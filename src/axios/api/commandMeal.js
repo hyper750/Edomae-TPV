@@ -22,6 +22,7 @@ export default {
         formData.append('number', number);
         formData.append('extra', extra);
         formData.append('discount', discount);
+        formData = AxiosHelper.removeOptionalValues(formData);
 
         return await getApiWithLogin().post(this.ENDPOINT, formData);
     },
