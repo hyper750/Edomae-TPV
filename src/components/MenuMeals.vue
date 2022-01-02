@@ -3,7 +3,7 @@
         <!-- Select a category -->
         <v-row v-if="mustShowCategory">
             <v-col
-                md="3"
+                md="4"
                 v-for="mealCategory in categories"
                 :key="mealCategory.id"
             >
@@ -23,7 +23,9 @@
                         />
 
                         <v-card-title>
-                            {{ mealCategory.name }}
+                            <p class="text-truncate">
+                                {{ mealCategory.name }}
+                            </p>
                         </v-card-title>
                     </v-card>
                 </v-hover>
@@ -38,7 +40,7 @@
                     {{ $t("Meal categories") }}
                 </v-btn>
             </v-col>
-            <v-col md="3" v-for="meal in getMealByCategory" :key="meal.id">
+            <v-col md="4" v-for="meal in getMealByCategory" :key="meal.id">
                 <v-hover v-slot="{ hover }">
                     <v-card
                         class="cursor-pointer mb-4"
@@ -56,11 +58,11 @@
 
                         <v-card-title>
                             <v-row no-gutters>
-                                <v-col cols="10">
-                                    {{ meal.name }}
+                                <v-col md="8">
+                                    <p class="text-truncate">{{ meal.name }}</p>
                                 </v-col>
-                                <v-col cols="2 text-right">
-                                    {{ meal.price }}&euro;
+                                <v-col md="4">
+                                    <p class="text-right">{{ meal.price }}&euro;</p>
                                 </v-col>
                             </v-row>
                         </v-card-title>
