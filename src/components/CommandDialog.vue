@@ -20,6 +20,7 @@
                             :command="command"
                             ref="menuMeals"
                             @createCommand="createCommand"
+                            @mealAdded="mealAdded"
                         />
                     </v-col>
                 </v-row>
@@ -208,6 +209,10 @@ export default {
                         this.$i18n.t("Can't create a command")
                     )
                 );
+        },
+
+        mealAdded() {
+            this.loadCommand(this.table, this.deliveryCommand);
         },
     },
 };

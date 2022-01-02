@@ -86,6 +86,7 @@
                 :meal="selectedMeal"
                 :command="command"
                 @close="resetMealCommandDialog"
+                @mealAdded="mealAdded"
             />
         </v-dialog>
     </v-container>
@@ -162,6 +163,11 @@ export default {
         resetMealCommandDialog() {
             this.showMealCommandDialog = null;
             this.selectedMeal = null;
+        },
+
+        mealAdded() {
+            this.resetMealCommandDialog();
+            this.$emit("mealAdded");
         },
     },
 };

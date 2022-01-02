@@ -14,7 +14,9 @@
             <v-row>
                 <v-col md="12 text-center">
                     <h3 class="d-inline ml-10">{{ meal.name }}</h3>
-                    <h4 class="d-inline float-right mr-1 mt-1">{{ meal.price }}&euro;</h4>
+                    <h4 class="d-inline float-right mr-1 mt-1">
+                        {{ meal.price }}&euro;
+                    </h4>
                 </v-col>
             </v-row>
         </v-container>
@@ -47,11 +49,11 @@
                 </v-row>
             </v-container>
             <v-card-actions>
-                <v-btn @click="close()" color="blue darken-1" text>
+                <v-btn @click="close" color="blue darken-1" text>
                     {{ $t("Close") }}
                 </v-btn>
                 <v-spacer />
-                <v-btn @click="addMeal()" color="blue darken-1" text>
+                <v-btn @click="addMeal" color="blue darken-1" text>
                     {{ $t("Add meal") }}
                 </v-btn>
             </v-card-actions>
@@ -60,6 +62,8 @@
 </template>
 
 <script>
+import CommandMeal from "../axios/api/commandMeal";
+
 export default {
     props: {
         meal: Object,
@@ -90,7 +94,24 @@ export default {
         close() {
             this.$emit("close");
         },
-        addMeal() {},
+
+        addMeal() {
+            const commandMealData = {
+                command: this.command.id,
+                meal: this.meal.id,
+                number: this.number,
+                extra: this.extra,
+                discount: this.discount,
+            };
+            CommandMeal.post(commandMealData)
+                .then(() => this.$emit("mealAdded"))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't add meal")
+                    )
+                );
+        },
     },
 };
 </script>
