@@ -8,7 +8,12 @@ export default {
             'null'
         ];
 
-        for(const [key, value] of formData) {
+        for(let [key, value] of formData) {
+            // Set value to null if is an empty string
+            if(value === '') {
+                value = null;
+            }
+
             // Avoid to include null values
             if(blackListValues.includes(value)) {
                 continue;
