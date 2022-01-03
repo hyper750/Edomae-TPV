@@ -8,11 +8,11 @@
             <v-container fluid>
                 <v-row>
                     <v-col md="12">
-                        <v-btn color="blue darken-1" text>
+                        <v-btn color="blue darken-1" text @click="print">
                             <v-icon>mdi-printer</v-icon>
                             {{ $t("Print") }}
                         </v-btn>
-                        <v-btn color="success darken-1" text>
+                        <v-btn color="success darken-1" text @click="pay">
                             <v-icon> mdi-cash-multiple </v-icon>
                             {{ $t("Pay") }}
                         </v-btn>
@@ -221,6 +221,12 @@ export default {
 
         mealAdded() {
             this.loadCommand(this.table, this.deliveryCommand);
+        },
+
+        print() {},
+
+        pay() {
+            
         },
     },
 };
