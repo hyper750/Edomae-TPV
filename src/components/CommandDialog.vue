@@ -49,7 +49,7 @@
                             </v-col>
                             <v-col md="12">
                                 <h4 class="text-right">
-                                    {{ $t("Total price:") }} {{ getTotalPrice }}
+                                    {{ $t("Total price:") }} {{ getTotalPrice }} &euro;
                                 </h4>
                             </v-col>
                         </v-row>
@@ -177,7 +177,7 @@ export default {
 
         getTotalPrice() {
             let total = 0;
-            for(const commandMeal of this.commandMeals) {
+            for (const commandMeal of this.commandMeals) {
                 total += commandMeal.total_price;
             }
             return total;
@@ -275,7 +275,15 @@ export default {
             this.loadCommand(this.table, this.deliveryCommand);
         },
 
-        print() {},
+        print() {
+            // /print?command=<id:int>
+            const ticketContent = "<html><body><div>BLA</div></body></html>";
+
+            const ticketWindow = window.open();
+            ticketWindow.document.write(ticketContent);
+            ticketWindow.print();
+            ticketWindow.close();
+        },
 
         pay() {
             this.showPaymentProcess = true;
