@@ -8,11 +8,11 @@
             <v-container fluid>
                 <v-row>
                     <v-col md="12">
-                        <v-btn color="blue darken-1" text @click="print">
+                        <v-btn color="blue darken-1" text @click="print" :disabled="haveCommand">
                             <v-icon>mdi-printer</v-icon>
                             {{ $t("Print") }}
                         </v-btn>
-                        <v-btn color="success darken-1" text @click="pay">
+                        <v-btn color="success darken-1" text @click="pay" :disabled="haveCommand">
                             <v-icon> mdi-cash-multiple </v-icon>
                             {{ $t("Pay") }}
                         </v-btn>
@@ -137,6 +137,10 @@ export default {
                 commandMeal.total_price_formatted = `${commandMeal.total_price}€`;
             });
             return commandMeals;
+        },
+
+        haveCommand() {
+            return this.command === null;
         },
     },
 
