@@ -1,4 +1,5 @@
 import { getApiWithLogin } from "../axios";
+import AxiosHelper from "../helper";
 
 
 export default {
@@ -15,10 +16,11 @@ export default {
     async post(paymentMethod) {
         const { enabled, name, image } = paymentMethod;
 
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('name', name);
         formData.append('image', image, image.name);
+        formData = AxiosHelper.removeOptionalValues(formData);
 
         return await getApiWithLogin().post(this.ENDPOINT, formData);
     },
