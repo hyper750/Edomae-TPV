@@ -11,10 +11,19 @@
                     v-for="paymentMethod in paymentMethods"
                     :key="paymentMethod.id"
                 >
-                    <PaymentMethodObject :paymentMethod="paymentMethod" />
+                    <PaymentMethodObject
+                        :paymentMethod="paymentMethod"
+                        @click.native="() => makePayment(paymentMethod)"
+                    />
                 </v-col>
             </v-row>
         </v-container>
+
+        <v-card-actions>
+            <v-btn color="blue darken-1" text @click="closePaymentProcess">
+                {{ $t("close") }}
+            </v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 
@@ -51,6 +60,14 @@ export default {
                         this.$i18n.t("Can't load payment methods")
                     )
                 );
+        },
+
+        makePayment(paymentMethod) {
+            console.log(paymentMethod);
+        },
+
+        closePaymentProcess() {
+            this.$emit("close");
         },
     },
 };
