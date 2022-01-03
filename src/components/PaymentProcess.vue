@@ -64,6 +64,7 @@ export default {
 
         makePayment(paymentMethod) {
             console.log(paymentMethod);
+            this.$emit("pay");
         },
 
         closePaymentProcess() {
