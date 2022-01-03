@@ -8,13 +8,32 @@
             <v-container fluid>
                 <v-row>
                     <v-col md="12">
-                        <v-btn color="blue darken-1" text @click="print" :disabled="haveCommand">
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="print"
+                            :disabled="haveCommand"
+                        >
                             <v-icon>mdi-printer</v-icon>
                             {{ $t("Print") }}
                         </v-btn>
-                        <v-btn color="success darken-1" text @click="pay" :disabled="haveCommand">
+                        <v-btn
+                            color="success darken-1"
+                            text
+                            @click="pay"
+                            :disabled="haveCommand"
+                        >
                             <v-icon> mdi-cash-multiple </v-icon>
                             {{ $t("Pay") }}
+                        </v-btn>
+                        <v-btn
+                            color="error darken-1"
+                            text
+                            @click="deleteCommand"
+                            :disabled="haveCommand"
+                        >
+                            <v-icon> mdi-delete </v-icon>
+                            {{ $t("Delete command") }}
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -40,7 +59,11 @@
         </v-card-text>
 
         <v-dialog v-model="showPaymentProcess" eager>
-            <PaymentProcess :command="command" @close="closePaymentProcess" @pay="commandPaid" />
+            <PaymentProcess
+                :command="command"
+                @close="closePaymentProcess"
+                @pay="commandPaid"
+            />
         </v-dialog>
     </v-card>
 </template>
@@ -249,6 +272,24 @@ export default {
             this.closePaymentProcess();
             // Reload command
             this.loadCommand(this.table, this.deliveryCommand);
+        },
+
+        deleteCommand() {
+            if (!this.command) {
+                this.$store.dispatch(
+                    "setGlobalError",
+                    this.$i18n.t("Can't delete an empty command")
+                );
+                return;
+            }
+            CommandEndpoints.delete(this.command.id)
+                .then(() => this.loadCommand(this.table, this.deliveryCommand))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Error deleting the command")
+                    )
+                );
         },
     },
 };
