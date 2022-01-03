@@ -53,7 +53,7 @@
                     {{ $t("Close") }}
                 </v-btn>
                 <v-spacer />
-                <v-btn @click="addMeal" color="blue darken-1" text>
+                <v-btn @click="addMeal" color="success">
                     {{ $t("Add meal") }}
                 </v-btn>
             </v-card-actions>
