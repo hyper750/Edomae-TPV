@@ -84,7 +84,7 @@ import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
 import MenuMeals from "../components/MenuMeals";
 import PaymentProcess from "../components/PaymentProcess";
-import PrintCommandEndpoints from "../axios/api/printCommand";
+import TicketCommandEndpoints from "../axios/api/ticketCommand";
 
 export default {
     props: {
@@ -286,7 +286,7 @@ export default {
                 return;
             }
 
-            PrintCommandEndpoints.get(this.command.id)
+            TicketCommandEndpoints.get(this.command.id)
                 .then(({ data }) => {
                     const ticketWindow = window.open();
                     ticketWindow.document.write(data);
