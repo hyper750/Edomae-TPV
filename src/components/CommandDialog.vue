@@ -38,6 +38,10 @@
                 </v-row>
             </v-container>
         </v-card-text>
+
+        <v-dialog v-model="showPaymentProcess" eager>
+            <PaymentProcess :command="command" />
+        </v-dialog>
     </v-card>
 </template>
 
@@ -46,6 +50,7 @@ import MealEndpoints from "../axios/api/meal";
 import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
 import MenuMeals from "../components/MenuMeals";
+import PaymentProcess from "../components/PaymentProcess";
 
 export default {
     props: {
@@ -55,6 +60,7 @@ export default {
 
     components: {
         MenuMeals,
+        PaymentProcess,
     },
 
     data() {
@@ -89,6 +95,8 @@ export default {
                     value: "total_price_formatted",
                 },
             ],
+
+            showPaymentProcess: false,
         };
     },
 
@@ -226,7 +234,7 @@ export default {
         print() {},
 
         pay() {
-            
+            this.showPaymentProcess = true;
         },
     },
 };
