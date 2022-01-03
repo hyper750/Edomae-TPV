@@ -39,11 +39,20 @@
                 </v-row>
                 <v-row>
                     <v-col md="6">
-                        <v-data-table
-                            :headers="commandMealsHeaders"
-                            :items="getCommandMeals"
-                            class="elevation-1"
-                        />
+                        <v-row>
+                            <v-col md="12">
+                                <v-data-table
+                                    :headers="commandMealsHeaders"
+                                    :items="getCommandMeals"
+                                    class="elevation-1"
+                                />
+                            </v-col>
+                            <v-col md="12">
+                                <h4 class="text-right">
+                                    {{ $t("Total price:") }} {{ getTotalPrice }}
+                                </h4>
+                            </v-col>
+                        </v-row>
                     </v-col>
                     <v-col md="6">
                         <MenuMeals
@@ -164,6 +173,14 @@ export default {
 
         haveCommand() {
             return this.command === null;
+        },
+
+        getTotalPrice() {
+            let total = 0;
+            for(const commandMeal of this.commandMeals) {
+                total += commandMeal.total_price;
+            }
+            return total;
         },
     },
 
