@@ -40,7 +40,7 @@
         </v-card-text>
 
         <v-dialog v-model="showPaymentProcess" eager>
-            <PaymentProcess :command="command" />
+            <PaymentProcess :command="command" @close="closePaymentProcess" />
         </v-dialog>
     </v-card>
 </template>
@@ -235,6 +235,10 @@ export default {
 
         pay() {
             this.showPaymentProcess = true;
+        },
+
+        closePaymentProcess() {
+            this.showPaymentProcess = false;
         },
     },
 };
