@@ -49,7 +49,8 @@
                             </v-col>
                             <v-col md="12">
                                 <h4 class="text-right">
-                                    {{ $t("Total price:") }} {{ getTotalPrice }} &euro;
+                                    {{ $t("Total price:") }}
+                                    {{ getTotalPrice }} &euro;
                                 </h4>
                             </v-col>
                         </v-row>
@@ -83,6 +84,7 @@ import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
 import MenuMeals from "../components/MenuMeals";
 import PaymentProcess from "../components/PaymentProcess";
+import PrintCommandEndpoints from "../axios/api/printCommand";
 
 export default {
     props: {
@@ -276,13 +278,27 @@ export default {
         },
 
         print() {
-            // /print?command=<id:int>
-            const ticketContent = "<html><body><div>BLA</div></body></html>";
+            if (!this.command) {
+                this.$store.dispatch(
+                    "setGlobalError",
+                    this.$i18n.t("Empty command")
+                );
+                return;
+            }
 
-            const ticketWindow = window.open();
-            ticketWindow.document.write(ticketContent);
-            ticketWindow.print();
-            ticketWindow.close();
+            PrintCommandEndpoints.get(this.command.id)
+                .then(({ data }) => {
+                    const ticketWindow = window.open();
+                    ticketWindow.document.write(data);
+                    ticketWindow.print();
+                    ticketWindow.close();
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't print that command")
+                    )
+                );
         },
 
         pay() {
