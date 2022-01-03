@@ -7,6 +7,18 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
+                    <v-col md="12">
+                        <v-btn color="blue darken-1" text>
+                            <v-icon>mdi-printer</v-icon>
+                            {{ $t("Print") }}
+                        </v-btn>
+                        <v-btn color="success darken-1" text>
+                            <v-icon> mdi-cash-multiple </v-icon>
+                            {{ $t("Pay") }}
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                <v-row>
                     <v-col md="6">
                         <v-data-table
                             :headers="commandMealsHeaders"
@@ -106,7 +118,9 @@ export default {
                 commandMeal.name = meal.name;
 
                 // Format discount
-                commandMeal.discount_formatted = (commandMeal.discount) ? `${commandMeal.discount}%` : null;
+                commandMeal.discount_formatted = commandMeal.discount
+                    ? `${commandMeal.discount}%`
+                    : null;
 
                 // Get price of the meal
                 commandMeal.price_formatted = `${commandMeal.price}€`;
