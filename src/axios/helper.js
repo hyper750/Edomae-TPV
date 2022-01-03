@@ -5,15 +5,13 @@ export default {
         // Null, undefined... values are serialized to string
         const blackListValues = [
             'undefined',
-            'null'
+            'null',
+            null,
+            undefined,
+            '',
         ];
 
         for(let [key, value] of formData) {
-            // Set value to null if is an empty string
-            if(value === '') {
-                value = null;
-            }
-
             // Avoid to include null values
             if(blackListValues.includes(value)) {
                 continue;
