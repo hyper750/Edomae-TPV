@@ -1,5 +1,5 @@
 <template>
-    <v-card max-width="400">
+    <v-card max-width="400" v-id="meal">
         <v-card-title>
             {{ $t("Adding meal") }}
         </v-card-title>
