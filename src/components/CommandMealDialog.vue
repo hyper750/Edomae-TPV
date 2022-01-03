@@ -14,7 +14,7 @@
             <v-row>
                 <v-col md="12 text-center">
                     <h3 class="d-inline ml-10">{{ meal.name }}</h3>
-                    <h4 class="d-inline float-right mr-1 mt-1">
+                    <h4 class="d-inline float-right mr-2 mt-1">
                         {{ meal.price }}&euro;
                     </h4>
                 </v-col>
