@@ -28,8 +28,9 @@
 </template>
 
 <script>
-import PaymentMethod from "../axios/api/paymentMethod";
 import PaymentMethodObject from "../components/PaymentMethodObject";
+import PaymentMethodEndpoints from "../axios/api/paymentMethod";
+import CommandEndpoints from "../axios/api/command";
 
 export default {
     props: {
@@ -52,7 +53,7 @@ export default {
 
     methods: {
         loadPaymentMethods() {
-            PaymentMethod.list({ enabled: true })
+            PaymentMethodEndpoints.list({ enabled: true })
                 .then(({ data }) => (this.paymentMethods = data))
                 .catch(() =>
                     this.$store.dispatch(
@@ -63,8 +64,17 @@ export default {
         },
 
         makePayment(paymentMethod) {
-            console.log(paymentMethod);
-            this.$emit("pay");
+            CommandEndpoints.put(this.command.id, {
+                paid: true,
+                payment_method: paymentMethod.id,
+            })
+                .then(() => this.$emit("pay"))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't make the payment")
+                    )
+                );
         },
 
         closePaymentProcess() {

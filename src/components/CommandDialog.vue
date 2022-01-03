@@ -242,6 +242,7 @@ export default {
         },
 
         commandPaid() {
+            this.closePaymentProcess();
             // Reload command
             this.loadCommand(this.table, this.deliveryCommand);
         },
