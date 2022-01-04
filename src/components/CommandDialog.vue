@@ -45,7 +45,25 @@
                                     :headers="commandMealsHeaders"
                                     :items="getCommandMeals"
                                     class="elevation-1"
-                                />
+                                >
+                                    <template
+                                        slot="item.delete"
+                                        slot-scope="props"
+                                    >
+                                        <v-btn
+                                            class="mx-2"
+                                            icon
+                                            @click="
+                                                () =>
+                                                    deleteCommandMeal(
+                                                        props.item
+                                                    )
+                                            "
+                                        >
+                                            <v-icon dark>mdi-delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                </v-data-table>
                             </v-col>
                             <v-col md="12">
                                 <h4 class="text-right">
@@ -127,6 +145,10 @@ export default {
                 {
                     text: this.$i18n.t("Total"),
                     value: "total_price_formatted",
+                },
+                {
+                    text: "Delete",
+                    value: "delete",
                 },
             ],
 
@@ -329,6 +351,17 @@ export default {
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Error deleting the command")
+                    )
+                );
+        },
+
+        deleteCommandMeal(item) {
+            CommandMealEndpoints.delete(item.id)
+                .then(() => this.loadCommand(this.table, this.deliveryCommand))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't delete the command meal")
                     )
                 );
         },
