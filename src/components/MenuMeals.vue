@@ -57,14 +57,16 @@
                         />
 
                         <v-card-title>
-                            <v-row no-gutters>
-                                <v-col md="8">
-                                    <p class="text-truncate">{{ meal.name }}</p>
-                                </v-col>
-                                <v-col md="4">
-                                    <p class="text-right">{{ meal.price }}&euro;</p>
-                                </v-col>
-                            </v-row>
+                            <v-container fluid class="px-0">
+                                <v-row no-gutters>
+                                    <v-col md="8">
+                                        <p class="text-truncate">{{ meal.name }}</p>
+                                    </v-col>
+                                    <v-col md="4">
+                                        <p class="text-right">{{ meal.price }}&euro;</p>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
                         </v-card-title>
                         <v-card-text>
                             <div>
