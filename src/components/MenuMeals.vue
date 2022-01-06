@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-0">
         <!-- Select a category -->
-        <v-row v-if="mustShowCategory">
+        <v-row v-if="mustShowCategory" class="menu-meals-right-scroll">
             <v-col
                 md="4"
                 v-for="mealCategory in categories"
@@ -34,48 +34,54 @@
 
         <!-- Select meal -->
         <v-row v-else>
-            <v-col md="12">
-                <v-btn text @click="() => setSelectedCategories(null)">
-                    <v-icon> mdi-chevron-left </v-icon>
-                    {{ $t("Meal categories") }}
-                </v-btn>
-            </v-col>
-            <v-col md="4" v-for="meal in getMealByCategory" :key="meal.id">
-                <v-hover v-slot="{ hover }">
-                    <v-card
-                        class="cursor-pointer mb-4"
-                        :class="{
-                            'elevation-12': hover,
-                            'elevation-6': !hover,
-                        }"
-                        @click="() => selectMeal(meal)"
-                    >
-                        <v-img
-                            :src="meal.imatge"
-                            height="150"
-                            :class="{ disabledOpacity: !meal.enabled }"
-                        />
+            <v-container fluid>
+                <v-row>
+                    <v-col md="12">
+                        <v-btn text @click="() => setSelectedCategories(null)">
+                            <v-icon> mdi-chevron-left </v-icon>
+                            {{ $t("Meal categories") }}
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                <v-row class="menu-meals-right-scroll">
+                    <v-col md="4" v-for="meal in getMealByCategory" :key="meal.id">
+                        <v-hover v-slot="{ hover }">
+                            <v-card
+                                class="cursor-pointer mb-4"
+                                :class="{
+                                    'elevation-12': hover,
+                                    'elevation-6': !hover,
+                                }"
+                                @click="() => selectMeal(meal)"
+                            >
+                                <v-img
+                                    :src="meal.imatge"
+                                    height="150"
+                                    :class="{ disabledOpacity: !meal.enabled }"
+                                />
 
-                        <v-card-title>
-                            <v-container fluid class="px-0">
-                                <v-row no-gutters>
-                                    <v-col md="8">
-                                        <p class="text-truncate">{{ meal.name }}</p>
-                                    </v-col>
-                                    <v-col md="4">
-                                        <p class="text-right">{{ meal.price }}&euro;</p>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card-title>
-                        <v-card-text>
-                            <div>
-                                {{ meal.description }}
-                            </div>
-                        </v-card-text>
-                    </v-card>
-                </v-hover>
-            </v-col>
+                                <v-card-title>
+                                    <v-container fluid class="px-0">
+                                        <v-row no-gutters>
+                                            <v-col md="8">
+                                                <p class="text-truncate">{{ meal.name }}</p>
+                                            </v-col>
+                                            <v-col md="4">
+                                                <p class="text-right">{{ meal.price }}&euro;</p>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-title>
+                                <v-card-text>
+                                    <div>
+                                        {{ meal.description }}
+                                    </div>
+                                </v-card-text>
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                </v-row>
+            </v-container>
         </v-row>
 
         <!-- Select command meal -->
@@ -93,6 +99,14 @@
         </v-dialog>
     </v-container>
 </template>
+
+<style scoped>
+.menu-meals-right-scroll {
+    height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+</style>
 
 <script>
 import MealCategoryEndpoints from "../axios/api/mealCategory";
