@@ -6,10 +6,10 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
-                    <v-col cols="12">
+                    <v-col md="12">
                         <v-checkbox :label="$t('Enabled')" v-model="enabled" />
                     </v-col>
-                    <v-col cols="12">
+                    <v-col md="6">
                         <v-text-field
                             :label="$t('Name')"
                             v-model="name"
@@ -17,15 +17,7 @@
                             :rules="nameRules"
                         />
                     </v-col>
-                    <v-col cols="6">
-                        <v-text-field
-                            type="number"
-                            :label="$t('Order')"
-                            v-model="order"
-                            :rules="orderRules"
-                        />
-                    </v-col>
-                    <v-col cols="6">
+                    <v-col md="6">
                         <v-file-input
                             accept="image/*"
                             :label="$t('Imatge')"
@@ -74,9 +66,6 @@ export default {
         mealCategory: {
             type: Object,
         },
-        lastMealCategoryOrder: {
-            type: Number
-        }
     },
 
     components: {
@@ -97,12 +86,6 @@ export default {
                     this.$t("At least a character is required"),
             ],
 
-            order: this.getDefaultOrder(),
-            orderRules: [
-                (f) =>
-                    f.length !== 0 || this.$t("Put an order for the category"),
-            ],
-
             imatge: null,
             imatgeRules: [
                 (f) =>
@@ -116,24 +99,14 @@ export default {
         mealCategory: function (newValue) {
             this.enabled = newValue.enabled;
             this.name = newValue.name;
-            this.order = newValue.order;
             // this.imatge = newValue.imatge;
-        },
-
-        lastMealCategoryOrder: function(newValue) {
-            this.order = newValue + 1;
         },
     },
 
     methods: {
-        getDefaultOrder() {
-            return (this.lastMealCategoryOrder)? this.lastMealCategoryOrder + 1 : 1;
-        },
-
         resetForm() {
             this.enabled = true;
             this.name = "";
-            this.order = this.getDefaultOrder();
             this.imatge = null;
         },
 
@@ -146,7 +119,6 @@ export default {
             const mealCategoryUpdate = {
                 enabled: this.enabled,
                 name: this.name,
-                order: this.order,
                 imatge: this.imatge,
             };
             // Save or create
