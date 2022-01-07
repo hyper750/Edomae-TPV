@@ -8,7 +8,10 @@
 
         <v-row>
             <v-col cols="12">
-                <v-dialog v-model="showCreateDialog" @click:outside="resetMealCategoryCreateDialog">
+                <v-dialog
+                    v-model="showCreateDialog"
+                    @click:outside="resetMealCategoryCreateDialog"
+                >
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="success" v-on="on" v-bind="attrs">
                             <svg
@@ -44,7 +47,14 @@
             />
         </v-dialog>
 
-        <v-row class="mt-2">
+        <draggable
+            v-model="mealCategories"
+            group="mealCategories"
+            @start="drag = true"
+            @end="drag = false"
+            class="row mt-2"
+            @update="(event) => onMealCategoriesOrderChange(event)"
+        >
             <v-col
                 md="4"
                 v-for="mealCategory in mealCategories"
@@ -54,7 +64,7 @@
                     <MealCategoryObject :mealCategory="mealCategory" />
                 </span>
             </v-col>
-        </v-row>
+        </draggable>
     </v-container>
 </template>
 
@@ -63,9 +73,11 @@ import BreadCrumb from "../components/BreadCrumb";
 import MealCategoryEndpoints from "../axios/api/mealCategory";
 import MealCategoryObject from "../components/MealCategoryObject";
 import MealCategoryDialog from "../components/MealCategoryDialog";
+import draggable from "vuedraggable";
 
 export default {
     components: {
+        draggable,
         BreadCrumb,
         MealCategoryObject,
         MealCategoryDialog,
@@ -126,6 +138,24 @@ export default {
 
         resetMealCategoryCreateDialog() {
             this.$refs.mealCategoryCreateDialog.close();
+        },
+
+        onMealCategoriesOrderChange(event) {
+            const newIndex = event.newIndex;
+            const oldIndex = event.oldIndex;
+
+            // Update current element position
+            // And on the backend shift the other elements between the position updated
+            let newOrder;
+            if(oldIndex < newIndex) {
+                newOrder = (newIndex - 1 >= 0)? this.mealCategories[newIndex - 1].order : 1;
+            }
+            else {
+                newOrder = (newIndex + 1 < this.mealCategories.length)? this.mealCategories[newIndex + 1].order : this.mealCategories.length;
+            }
+            MealCategoryEndpoints.put(this.mealCategories[newIndex].id, {
+                order: newOrder,
+            }).then(() => this.loadMealCategory());
         },
     },
 };
