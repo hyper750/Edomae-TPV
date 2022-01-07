@@ -1,4 +1,5 @@
 import { getApiWithLogin } from "../axios";
+import axiosHelper from "../helper";
 
 const MealCategory = {
     ENDPOINT: "/mealCategory",
@@ -9,11 +10,12 @@ const MealCategory = {
 
     async post(mealCategory) {
         const { enabled, name, order, imatge } = mealCategory;
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('name', name);
         formData.append('order', order);
         formData.append('imatge', imatge, imatge.name);
+        formData = axiosHelper.removeOptionalValues(formData);
         return await getApiWithLogin().post(this.ENDPOINT, formData)
     },
 
@@ -23,14 +25,14 @@ const MealCategory = {
 
     async put(id, mealCategoryData) {
         const { enabled, name, order, imatge } = mealCategoryData;
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('name', name);
         formData.append('order', order);
-        // TODO: Why is obligated to update the imatge?
         if (imatge) {
             formData.append('imatge', imatge, imatge.name);
         }
+        formData = axiosHelper.removeOptionalValues(formData);
 
         return await getApiWithLogin().put(`${this.ENDPOINT}/${id}`, formData)
     },
