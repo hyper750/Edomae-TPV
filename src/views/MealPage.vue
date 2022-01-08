@@ -1,14 +1,17 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-col cols="12">
+            <v-col md="12">
                 <BreadCrumb />
             </v-col>
         </v-row>
 
         <v-row>
-            <v-col cols="12">
-                <v-dialog v-model="showCreateDialog" @click:outside="resetCreateMealDialog">
+            <v-col md="1">
+                <v-dialog
+                    v-model="showCreateDialog"
+                    @click:outside="resetCreateMealDialog"
+                >
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="success" v-on="on" v-bind="attrs">
                             <svg
@@ -33,6 +36,14 @@
                         @save="saveCreateDialog"
                     />
                 </v-dialog>
+            </v-col>
+            <v-col md="2">
+                <v-select
+                    v-model="selectedMealCategory"
+                    :items="getMealCategories"
+                    :label="$t('Meal category')"
+                    @change="onMealCategoryChange"
+                />
             </v-col>
         </v-row>
 
@@ -60,6 +71,7 @@ import BreadCrumb from "../components/BreadCrumb";
 import MealEndpoints from "../axios/api/meal";
 import MealObject from "../components/MealObject";
 import MealDialog from "../components/MealDialog";
+import MealCategoryEndpoints from "../axios/api/mealCategory";
 
 export default {
     components: {
@@ -69,7 +81,8 @@ export default {
     },
 
     mounted() {
-        this.loadMeal();
+        this.loadMealCategories();
+        this.loadMeal(this.selectedMealCategory);
     },
 
     data() {
@@ -78,6 +91,8 @@ export default {
             showCreateDialog: false,
             showUpdateDialog: false,
             updateMeal: null,
+            mealCategories: [],
+            selectedMealCategory: null,
         };
     },
 
@@ -85,17 +100,50 @@ export default {
         getLastMealOrder() {
             const orders = this.meals.map(({ order }) => order);
 
-            if(orders.length === 0) {
+            if (orders.length === 0) {
                 return 0;
             }
 
             return Math.max(...orders);
         },
+
+        getMealCategories() {
+            const mealCategories = this.mealCategories.map((d) => {
+                let name = d.name;
+
+                if (!d.enabled) {
+                    name += ` (${this.$i18n.t("disabled")})`;
+                }
+
+                return {
+                    text: name,
+                    value: d.id,
+                };
+            });
+            mealCategories.unshift({
+                text: this.$i18n.t("All meal categories"),
+                value: null,
+            });
+            return mealCategories;
+        },
     },
 
     methods: {
-        loadMeal() {
-            MealEndpoints.list()
+        loadMealCategories() {
+            MealCategoryEndpoints.list()
+                .then(({ data }) => (this.mealCategories = data))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't load meal categories")
+                    )
+                );
+        },
+
+        loadMeal(mealCategoryId) {
+            MealEndpoints.list({
+                category: mealCategoryId
+            })
                 .then(({ data }) => (this.meals = data))
                 .catch(() =>
                     this.$store.dispatch(
@@ -111,7 +159,7 @@ export default {
 
         saveCreateDialog() {
             this.closeCreateDialog();
-            this.loadMeal();
+            this.loadMeal(this.selectedMealCategory);
         },
 
         closeUpdateDialog() {
@@ -120,7 +168,7 @@ export default {
 
         saveUpdateDialog() {
             this.closeUpdateDialog();
-            this.loadMeal();
+            this.loadMeal(this.selectedMealCategory);
         },
 
         openUpdateDialog(meal) {
@@ -130,11 +178,15 @@ export default {
 
         deleteObjectDialog() {
             this.closeUpdateDialog();
-            this.loadMeal();
+            this.loadMeal(this.selectedMealCategory);
         },
 
         resetCreateMealDialog() {
             this.$refs.createMealDialog.close();
+        },
+
+        onMealCategoryChange(newMealCategory) {
+            this.loadMeal(newMealCategory);
         },
     },
 };
