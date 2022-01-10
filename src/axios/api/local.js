@@ -21,7 +21,6 @@ export default {
     async put(id, local) {
         const { enabled, name, imatge } = local;
 
-        // TODO: Why is obligated to update the imatge?
         const formData = new FormData();
         formData.append('enabled', enabled);
         formData.append('name', name);
