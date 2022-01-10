@@ -4,10 +4,13 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
-                    <v-col cols="12">
+                    <v-col md="6">
                         <v-checkbox v-model="enabled" :label="$t('Enabled')" />
                     </v-col>
-                    <v-col cols="12">
+                    <v-col md="6">
+                        <v-text-field :value="getId" :label="$t('Reference')" readonly disabled />
+                    </v-col>
+                    <v-col md="12">
                         <v-text-field
                             v-model="name"
                             :label="$t('Name')"
@@ -15,7 +18,7 @@
                             :rules="nameRules"
                         />
                     </v-col>
-                    <v-col cols="12">
+                    <v-col md="12">
                         <v-text-field
                             v-model="description"
                             :label="$t('Description')"
@@ -23,7 +26,7 @@
                             :rules="descriptionRules"
                         />
                     </v-col>
-                    <v-col cols="6">
+                    <v-col md="6">
                         <v-text-field
                             v-model="price"
                             :label="$t('Price')"
@@ -31,7 +34,7 @@
                             :rules="priceRules"
                         />
                     </v-col>
-                    <v-col cols="6">
+                    <v-col md="6">
                         <v-select
                             :items="categories"
                             v-model="category"
@@ -39,7 +42,7 @@
                             :rules="categoryRules"
                         />
                     </v-col>
-                    <v-col cols="6">
+                    <v-col md="6">
                         <v-file-input
                             v-model="imatge"
                             :label="$t('Imatge')"
@@ -236,6 +239,12 @@ export default {
                         this.$i18n.t("Error getting category meals")
                     )
                 );
+        },
+    },
+
+    computed: {
+        getId() {
+            return (this.meal)? this.meal.id : "";
         },
     },
 };
