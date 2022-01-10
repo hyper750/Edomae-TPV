@@ -30,7 +30,6 @@
                         </v-btn>
                     </template>
                     <MealDialog
-                        :lastMealOrder="getLastMealOrder"
                         ref="createMealDialog"
                         @close="closeCreateDialog"
                         @save="saveCreateDialog"
@@ -56,13 +55,20 @@
             />
         </v-dialog>
 
-        <v-row>
+        <draggable
+            class="row"
+            group="meal"
+            @start="drag = true"
+            @end="drag = false"
+            v-model="meals"
+            @update="(event) => onMealChange(event)"
+        >
             <v-col md="4" v-for="meal in meals" :key="meal.id">
                 <span @click.stop="() => openUpdateDialog(meal)">
                     <MealObject :meal="meal" />
                 </span>
             </v-col>
-        </v-row>
+        </draggable>
     </v-container>
 </template>
 
@@ -72,9 +78,11 @@ import MealEndpoints from "../axios/api/meal";
 import MealObject from "../components/MealObject";
 import MealDialog from "../components/MealDialog";
 import MealCategoryEndpoints from "../axios/api/mealCategory";
+import draggable from "vuedraggable";
 
 export default {
     components: {
+        draggable,
         BreadCrumb,
         MealObject,
         MealDialog,
@@ -97,16 +105,6 @@ export default {
     },
 
     computed: {
-        getLastMealOrder() {
-            const orders = this.meals.map(({ order }) => order);
-
-            if (orders.length === 0) {
-                return 0;
-            }
-
-            return Math.max(...orders);
-        },
-
         getMealCategories() {
             const mealCategories = this.mealCategories.map((d) => {
                 let name = d.name;
@@ -142,7 +140,7 @@ export default {
 
         loadMeal(mealCategoryId) {
             MealEndpoints.list({
-                category: mealCategoryId
+                category: mealCategoryId,
             })
                 .then(({ data }) => (this.meals = data))
                 .catch(() =>
@@ -187,6 +185,31 @@ export default {
 
         onMealCategoryChange(newMealCategory) {
             this.loadMeal(newMealCategory);
+        },
+
+        onMealChange(event) {
+            const newIndex = event.newIndex;
+            const oldIndex = event.oldIndex;
+
+            // Update current element position
+            // And on the backend shift the other elements between the position updated
+            let newOrder;
+            if (oldIndex < newIndex) {
+                newOrder = (newIndex - 1 >= 0) ? this.meals[newIndex - 1].order : 1;
+            } else {
+                newOrder = (newIndex + 1 < this.meals.length) ? this.meals[newIndex + 1].order : this.meals.length;
+            }
+
+            MealEndpoints.put(this.meals[newIndex].id, {
+                order: newOrder,
+            })
+                .then(() => this.loadMeal(this.selectedMealCategory))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't update the meal")
+                    )
+                );
         },
     },
 };

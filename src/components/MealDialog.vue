@@ -40,14 +40,6 @@
                         />
                     </v-col>
                     <v-col cols="6">
-                        <v-text-field
-                            v-model="order"
-                            :label="$t('Order')"
-                            type="number"
-                            :rules="orderRules"
-                        />
-                    </v-col>
-                    <v-col cols="6">
                         <v-file-input
                             v-model="imatge"
                             :label="$t('Imatge')"
@@ -96,7 +88,6 @@ import MealCategoryEndpoints from "../axios/api/mealCategory";
 export default {
     props: {
         meal: Object,
-        lastMealOrder: Number,
     },
 
     components: {
@@ -125,11 +116,6 @@ export default {
                 (f) =>
                     f.length !== 0 ||
                     this.$t("At least a character is required"),
-            ],
-
-            order: this.getDefaultOrder(),
-            orderRules: [
-                (f) => f.length !== 0 || this.$t("Put an order for the meal"),
             ],
 
             categories: [],
@@ -164,26 +150,17 @@ export default {
             this.enabled = newValue.enabled;
             this.name = newValue.name;
             this.description = newValue.description;
-            this.order = newValue.order;
             // this.imatge = newValue.imatge;
             this.price = newValue.price;
             this.category = newValue.category;
         },
-        lastMealOrder: function(newValue) {
-            this.order = newValue + 1;
-        }
     },
 
     methods: {
-        getDefaultOrder() {
-            return (this.lastMealOrder)? this.lastMealOrder + 1 : 1;
-        },
-        
         resetForm() {
             this.enabled = true;
             this.name = "";
             this.description = "";
-            this.order = this.getDefaultOrder();
             this.imatge = null;
             this.price = "1.0";
             this.category = null;
@@ -199,7 +176,6 @@ export default {
                 enabled: this.enabled,
                 name: this.name,
                 description: this.description,
-                order: this.order,
                 imatge: this.imatge,
                 price: this.price,
                 category: this.category,
