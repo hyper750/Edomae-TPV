@@ -122,6 +122,11 @@ export default {
                     icon: "mdi-home",
                 },
                 {
+                    name: 'Delivery',
+                    link: '/delivery',
+                    icon: 'mdi-moped'
+                },
+                {
                     name: "Admin",
                     permissions: [() => this.isUserAdmin],
                     icon: "mdi-wrench",

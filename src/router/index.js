@@ -8,6 +8,7 @@ import MealPage from "../views/MealPage";
 import PaymentMethodPage from "../views/PaymentMethodPage";
 import LocalPage from "../views/LocalPage";
 import TablePage from "../views/TablePage";
+import DeliveryPage from "../views/DeliveryPage";
 import PageNotFound from "../views/PageNotFound";
 import UserEndpoints from "../axios/api/user";
 import i18n from "../translations";
@@ -142,6 +143,22 @@ const router = new VueRouter({
                         text: i18n.t('Table'),
                         disabled: true,
                         href: '/table'
+                    }
+                ]
+            }
+        },
+        {
+            name: 'Delivery',
+            path: '/delivery',
+            component: DeliveryPage,
+            meta: {
+                title: i18n.t("Delivery - Edomae"),
+                login: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t("Delivery"),
+                        disabled: true,
+                        href: '/delivery'
                     }
                 ]
             }
