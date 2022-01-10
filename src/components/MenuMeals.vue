@@ -61,7 +61,7 @@
                                 />
 
                                 <v-card-title>
-                                    <v-container fluid class="px-0">
+                                    <v-container fluid class="px-0 py-0">
                                         <v-row no-gutters>
                                             <v-col md="8">
                                                 <p class="text-truncate">{{ meal.name }}</p>
@@ -70,12 +70,16 @@
                                                 <p class="text-right">{{ meal.price }}&euro;</p>
                                             </v-col>
                                         </v-row>
+                                        <v-row no-gutters>
+                                            <v-col md="12">
+                                                <p class="font-italic subtitle-2">{{$t("Reference")}}: {{ meal.id }}</p>
+                                            </v-col>
+                                        </v-row>
                                     </v-container>
                                 </v-card-title>
                                 <v-card-text>
-                                    <div>
-                                        {{ meal.description }}
-                                    </div>
+                                    
+                                    <p>{{ meal.description }}</p>
                                 </v-card-text>
                             </v-card>
                         </v-hover>
