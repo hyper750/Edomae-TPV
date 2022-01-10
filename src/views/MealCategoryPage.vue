@@ -147,15 +147,21 @@ export default {
             // Update current element position
             // And on the backend shift the other elements between the position updated
             let newOrder;
-            if(oldIndex < newIndex) {
+            if (oldIndex < newIndex) {
                 newOrder = (newIndex - 1 >= 0)? this.mealCategories[newIndex - 1].order : 1;
-            }
-            else {
+            } else {
                 newOrder = (newIndex + 1 < this.mealCategories.length)? this.mealCategories[newIndex + 1].order : this.mealCategories.length;
             }
             MealCategoryEndpoints.put(this.mealCategories[newIndex].id, {
                 order: newOrder,
-            }).then(() => this.loadMealCategory());
+            })
+                .then(() => this.loadMealCategory())
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Error updating meal categories")
+                    )
+                );
         },
     },
 };
