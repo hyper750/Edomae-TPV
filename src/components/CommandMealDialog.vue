@@ -26,6 +26,14 @@
                 <v-row>
                     <v-col md="12">
                         <v-text-field
+                            :value="meal.id"
+                            readonly
+                            disabled
+                            :label="$t('Reference')"
+                        />
+                    </v-col>
+                    <v-col md="12">
+                        <v-text-field
                             v-model.number="number"
                             type="number"
                             :label="$t('Number of meals')"
@@ -118,7 +126,7 @@ export default {
                         this.$i18n.t("Can't add meal")
                     )
                 );
-            
+
             this.resetForm();
         },
     },
