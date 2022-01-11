@@ -4,13 +4,13 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-checkbox v-model="enabled" :label="$t('Enabled')" />
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-text-field :value="getId" :label="$t('Reference')" readonly disabled />
                     </v-col>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-text-field
                             v-model="name"
                             :label="$t('Name')"
@@ -18,7 +18,7 @@
                             :rules="nameRules"
                         />
                     </v-col>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-text-field
                             v-model="description"
                             :label="$t('Description')"
@@ -26,7 +26,7 @@
                             :rules="descriptionRules"
                         />
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-text-field
                             v-model="price"
                             :label="$t('Price')"
@@ -34,7 +34,7 @@
                             :rules="priceRules"
                         />
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-select
                             :items="categories"
                             v-model="category"
@@ -42,7 +42,7 @@
                             :rules="categoryRules"
                         />
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-file-input
                             v-model="imatge"
                             :label="$t('Imatge')"

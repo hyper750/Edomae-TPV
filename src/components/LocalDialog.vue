@@ -9,7 +9,7 @@
                     <v-col cols="12">
                         <v-checkbox :label="$t('Enabled')" v-model="enabled" />
                     </v-col>
-                    <v-col cols="6">
+                    <v-col md="6" cols="12">
                         <v-text-field
                             :label="$t('Name')"
                             v-model="name"
@@ -17,7 +17,7 @@
                             :rules="nameRules"
                         />
                     </v-col>
-                    <v-col cols="6">
+                    <v-col md="6" cols="12">
                         <v-file-input
                             accept="image/*"
                             :label="$t('Imatge')"

@@ -5,10 +5,10 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
-                    <v-col md="4">
+                    <v-col md="4" cols="12">
                         <v-checkbox v-model="enabled" :label="$t('Enabled')" />
                     </v-col>
-                    <v-col md="4">
+                    <v-col md="4" cols="12">
                         <v-text-field
                             type="number"
                             v-model="number"
@@ -16,7 +16,7 @@
                             :rules="numberRules"
                         />
                     </v-col>
-                    <v-col md="4">
+                    <v-col md="4" cols="12">
                         <v-text-field
                             type="number"
                             v-model="numberOfPersons"

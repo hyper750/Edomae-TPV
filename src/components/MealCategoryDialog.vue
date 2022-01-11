@@ -6,10 +6,10 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-checkbox :label="$t('Enabled')" v-model="enabled" />
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-text-field
                             :label="$t('Name')"
                             v-model="name"
@@ -17,7 +17,7 @@
                             :rules="nameRules"
                         />
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-file-input
                             accept="image/*"
                             :label="$t('Imatge')"
