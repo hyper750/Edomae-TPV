@@ -1,14 +1,39 @@
 <template>
     <v-navigation-drawer app v-if="isLoggedIn">
-        <v-list-item>
-            <v-list-item-content>
-                <v-list-item-title>
-                    <router-link :to="{ name: 'Home' }">
-                        <v-img src="@/assets/logo.png" alt="Edomae logo" />
-                    </router-link>
-                </v-list-item-title>
-            </v-list-item-content>
-        </v-list-item>
+        <v-list>
+            <v-list-item class="justify-center">
+                <v-list-item-avatar size="64">
+                    <v-img src="@/assets/avatar.png" alt="Avatar image" />
+                </v-list-item-avatar>
+            </v-list-item>
+            <v-list-item>
+                <v-list-group :value="false">
+                    <template v-slot:activator>
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                {{ username }}
+                            </v-list-item-title>
+                            <v-list-item-subtitle>
+                                {{ fullname }}
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </template>
+
+                    <v-list dense nav>
+                        <v-list-item link @click="logout">
+                            <v-list-item-icon>
+                                <v-icon> mdi-logout </v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title>{{
+                                    $t("Logout")
+                                }}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-list-group>
+            </v-list-item>
+        </v-list>
 
         <v-divider />
 
@@ -60,52 +85,8 @@
                 </v-list-group>
             </v-list-item>
         </v-list>
-
-        <v-container fluid class="userMenu">
-            <v-row>
-                <v-col cols="12">
-                    <v-menu offset-y>
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-container fluid v-bind="attrs" v-on="on" class="cursor-pointer">
-                                <v-row>
-                                    <v-col cols="12">
-                                        <v-list-item-avatar>
-                                            <v-img
-                                                src="@/assets/avatar-icon.png"
-                                            ></v-img>
-                                        </v-list-item-avatar>
-                                        <span class="font-weight-bold text--secondary text-capitalize">{{ username }}</span>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </template>
-
-                        <v-list>
-                            <v-list-item link @click="logout">
-                                <v-list-item-icon>
-                                    <v-icon> mdi-logout </v-icon>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <v-list-item-title>{{
-                                        $t("Logout")
-                                    }}</v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </v-col>
-            </v-row>
-        </v-container>
     </v-navigation-drawer>
 </template>
-
-<style scoped>
-.userMenu {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-}
-</style>
 
 <script>
 import UserEndpoints from "../axios/api/user";
@@ -122,9 +103,9 @@ export default {
                     icon: "mdi-home",
                 },
                 {
-                    name: 'Delivery',
-                    link: '/delivery',
-                    icon: 'mdi-moped'
+                    name: "Delivery",
+                    link: "/delivery",
+                    icon: "mdi-moped",
                 },
                 {
                     name: "Admin",
@@ -142,20 +123,20 @@ export default {
                             icon: "mdi-food-fork-drink",
                         },
                         {
-                            name: 'Payment Method',
-                            link: '/paymentMethod',
-                            icon: 'mdi-credit-card-outline',
+                            name: "Payment Method",
+                            link: "/paymentMethod",
+                            icon: "mdi-credit-card-outline",
                         },
                         {
-                            name: 'Local',
-                            link: '/local',
-                            icon: 'mdi-home-map-marker'
+                            name: "Local",
+                            link: "/local",
+                            icon: "mdi-home-map-marker",
                         },
                         {
-                            name: 'Table',
-                            link: '/table',
-                            icon: 'mdi-table-furniture'
-                        }
+                            name: "Table",
+                            link: "/table",
+                            icon: "mdi-table-furniture",
+                        },
                     ],
                 },
             ],
@@ -180,9 +161,18 @@ export default {
         isLoggedIn() {
             return this.$store.getters.getToken && this.$store.getters.getUser;
         },
+
         username() {
             const user = this.$store.getters.getUser;
             return user ? user.username : "";
+        },
+
+        fullname() {
+            const user = this.$store.getters.getUser;
+            if (!user) {
+                return "";
+            }
+            return `${user.name} ${user.surname} ${user.lastname}`;
         },
 
         isUserAdmin() {
