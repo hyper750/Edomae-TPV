@@ -7,7 +7,7 @@
         <v-card-text>
             <v-container fluid>
                 <v-row>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-btn
                             color="blue darken-1"
                             text
@@ -38,9 +38,9 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <v-row>
-                            <v-col md="12">
+                            <v-col md="12" cols="12">
                                 <v-data-table
                                     :headers="commandMealsHeaders"
                                     :items="getCommandMeals"
@@ -65,7 +65,7 @@
                                     </template>
                                 </v-data-table>
                             </v-col>
-                            <v-col md="12">
+                            <v-col md="12" cols="12">
                                 <h4 class="text-right">
                                     {{ $t("Total price:") }}
                                     {{ getTotalPrice }} &euro;
@@ -73,7 +73,7 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col md="6">
+                    <v-col md="6" cols="12">
                         <MenuMeals
                             :meals="mealsMenu"
                             :command="command"

@@ -12,7 +12,7 @@
 
         <v-container fluid class="mt-2">
             <v-row>
-                <v-col md="12 text-center">
+                <v-col md="12" cols="12" class="text-center">
                     <h3 class="d-inline ml-10">{{ meal.name }}</h3>
                     <h4 class="d-inline float-right mr-2 mt-1">
                         {{ meal.price }}&euro;
@@ -24,7 +24,7 @@
         <v-card-text>
             <v-container fluid class="mt-2">
                 <v-row>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-text-field
                             :value="meal.id"
                             readonly
@@ -32,7 +32,7 @@
                             :label="$t('Reference')"
                         />
                     </v-col>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-text-field
                             v-model.number="number"
                             type="number"
@@ -40,13 +40,13 @@
                             :rules="numberRules"
                         />
                     </v-col>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-text-field
                             v-model="extra"
                             :label="$t('Add extras')"
                         />
                     </v-col>
-                    <v-col md="12">
+                    <v-col md="12" cols="12">
                         <v-text-field
                             v-model.number="discount"
                             type="number"
