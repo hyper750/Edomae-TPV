@@ -204,7 +204,10 @@ export default {
             for (const commandMeal of this.commandMeals) {
                 total += commandMeal.total_price;
             }
-            return total;
+            const precision = 2;
+            const multiplier = (10 ** precision);
+
+            return Math.round(total * multiplier) / multiplier;
         },
     },
 
