@@ -21,6 +21,11 @@
                     :items="getTableItems"
                     class="elevation-1"
                 >
+                    <template slot="item.paid" slot-scope="props">
+                        <v-icon>
+                            {{ getPaidIcon(props.item.paid) }}
+                        </v-icon>
+                    </template>
                     <template slot="item.detail" slot-scope="props">
                         <v-btn icon @click="() => detailCommand(props.item)">
                             <v-icon dark> mdi-pencil </v-icon>
@@ -55,6 +60,11 @@
                     :items="getDeliveryItems"
                     class="elevation-1"
                 >
+                    <template slot="item.paid" slot-scope="props">
+                        <v-icon>
+                            {{ getPaidIcon(props.item.paid) }}
+                        </v-icon>
+                    </template>
                     <template slot="item.detail" slot-scope="props">
                         <v-btn icon @click="() => detailCommand(props.item)">
                             <v-icon dark> mdi-pencil </v-icon>
@@ -249,6 +259,14 @@ export default {
                         this.$i18n.t("Can't print the command")
                     )
                 );
+        },
+
+        getPaidIcon(paid) {
+            if (paid) {
+                return "mdi-check";
+            }
+
+            return "mdi-close";
         },
     },
 };
