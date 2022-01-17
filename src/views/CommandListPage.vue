@@ -14,6 +14,10 @@
             </v-col>
         </v-row>
 
+        <v-dialog v-model="showCommandMealListDialog" eager>
+            <CommandMealListDialog :command="selectedCommand" />
+        </v-dialog>
+
         <v-row>
             <v-col cols="12">
                 <v-data-table
@@ -90,10 +94,12 @@
 import BreadCrumb from "../components/BreadCrumb";
 import CommandEndpoints from "../axios/api/command";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
+import CommandMealListDialog from "../components/CommandMealListDialog";
 
 export default {
     components: {
         BreadCrumb,
+        CommandMealListDialog,
     },
 
     mounted() {
@@ -168,6 +174,9 @@ export default {
                 },
             ],
             deliveryCommandList: [],
+            
+            selectedCommand: null,
+            showCommandMealListDialog: false,
 
             // creation_date__gte: startDate.toISOString(),
             // creation_date__lte: endDate.toISOString(),
@@ -230,8 +239,8 @@ export default {
         },
 
         detailCommand(command) {
-            // TODO: Show detail of the command
-            console.log(command);
+            this.selectedCommand = command;
+            this.showCommandMealListDialog = true;
         },
 
         deleteCommand(command) {
