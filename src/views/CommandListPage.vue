@@ -16,7 +16,6 @@
 
         <v-row>
             <v-col cols="12">
-                {{ tableCommandList }}
                 <v-data-table
                     :headers="tableCommandListHeaders"
                     :items="getTableItems"
@@ -25,6 +24,45 @@
                     <template slot="item.detail" slot-scope="props">
                         <v-btn icon @click="() => detailCommand(props.item)">
                             <v-icon dark> mdi-pencil </v-icon>
+                        </v-btn>
+                    </template>
+                    <template slot="item.print" slot-scope="props">
+                        <v-btn icon @click="() => printCommand(props.item)">
+                            <v-icon dark> mdi-printer </v-icon>
+                        </v-btn>
+                    </template>
+                    <template slot="item.delete" slot-scope="props">
+                        <v-btn icon @click="() => deleteCommand(props.item)">
+                            <v-icon dark> mdi-delete </v-icon>
+                        </v-btn>
+                    </template>
+                </v-data-table>
+            </v-col>
+        </v-row>
+
+        <v-row class="pt-6">
+            <v-col cols="12">
+                <h2>
+                    {{ $t("Delivery commands") }}
+                </h2>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col cols="12">
+                <v-data-table
+                    :headers="deliveryCommandListHeaders"
+                    :items="getDeliveryItems"
+                    class="elevation-1"
+                >
+                    <template slot="item.detail" slot-scope="props">
+                        <v-btn icon @click="() => detailCommand(props.item)">
+                            <v-icon dark> mdi-pencil </v-icon>
+                        </v-btn>
+                    </template>
+                    <template slot="item.print" slot-scope="props">
+                        <v-btn icon @click="() => printCommand(props.item)">
+                            <v-icon dark> mdi-printer </v-icon>
                         </v-btn>
                     </template>
                     <template slot="item.delete" slot-scope="props">
@@ -41,6 +79,7 @@
 <script>
 import BreadCrumb from "../components/BreadCrumb";
 import CommandEndpoints from "../axios/api/command";
+import TicketCommandEndpoints from "../axios/api/ticketCommand";
 
 export default {
     components: {
@@ -78,11 +117,47 @@ export default {
                     value: "detail",
                 },
                 {
+                    text: "Print",
+                    value: "print",
+                },
+                {
                     text: "Delete",
                     value: "delete",
                 },
             ],
             tableCommandList: [],
+
+            deliveryCommandListHeaders: [
+                {
+                    text: this.$i18n.t("Id"),
+                    value: "id",
+                },
+                {
+                    text: this.$i18n.t("Date"),
+                    value: "creation_date",
+                },
+                {
+                    text: this.$i18n.t("Delivery address"),
+                    value: "delivery_address",
+                },
+                {
+                    text: this.$i18n.t("Paid"),
+                    value: "paid",
+                },
+                {
+                    text: "Detail",
+                    value: "detail",
+                },
+                {
+                    text: "Print",
+                    value: "print",
+                },
+                {
+                    text: "Delete",
+                    value: "delete",
+                },
+            ],
+            deliveryCommandList: [],
 
             // creation_date__gte: startDate.toISOString(),
             // creation_date__lte: endDate.toISOString(),
@@ -95,6 +170,10 @@ export default {
     computed: {
         getTableItems() {
             return this.tableCommandList;
+        },
+
+        getDeliveryItems() {
+            return this.deliveryCommandList;
         },
     },
 
@@ -109,7 +188,22 @@ export default {
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
-                        this.$i18n.t("Can't load commands")
+                        this.$i18n.t("Can't load table commands")
+                    )
+                );
+        },
+
+        loadDeliveryCommands(filters) {
+            const deliveryFilters = {
+                ...filters,
+                is_home_delivery: true,
+            };
+            CommandEndpoints.list(deliveryFilters)
+                .then(({ data }) => (this.deliveryCommandList = data))
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't load delivery commands")
                     )
                 );
         },
@@ -122,6 +216,7 @@ export default {
                 // creation_date__lte: this.creation_date__lte
             };
             this.loadTableCommands(filters);
+            this.loadDeliveryCommands(filters);
         },
 
         detailCommand(command) {
@@ -136,6 +231,22 @@ export default {
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Can't delete the command")
+                    )
+                );
+        },
+
+        printCommand(command) {
+            TicketCommandEndpoints.get(command.id)
+                .then(({ data }) => {
+                    const ticketWindow = window.open();
+                    ticketWindow.document.write(data);
+                    ticketWindow.print();
+                    ticketWindow.close();
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't print the command")
                     )
                 );
         },
