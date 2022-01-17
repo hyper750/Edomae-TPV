@@ -9,6 +9,7 @@ import PaymentMethodPage from "../views/PaymentMethodPage";
 import LocalPage from "../views/LocalPage";
 import TablePage from "../views/TablePage";
 import DeliveryPage from "../views/DeliveryPage";
+import CommandListPage from "../views/CommandListPage";
 import PageNotFound from "../views/PageNotFound";
 import UserEndpoints from "../axios/api/user";
 import i18n from "../translations";
@@ -159,6 +160,22 @@ const router = new VueRouter({
                         text: i18n.t("Delivery"),
                         disabled: true,
                         href: '/delivery'
+                    }
+                ]
+            }
+        },
+        {
+            name: 'Command List',
+            path: '/commandList',
+            component: CommandListPage,
+            meta: {
+                title: i18n.t("Command List - Edomae"),
+                login: true,
+                breadcrumb: [
+                    {
+                        text: i18n.t("Command List"),
+                        disabled: true,
+                        href: '/commandList'
                     }
                 ]
             }

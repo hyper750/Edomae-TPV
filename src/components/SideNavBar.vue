@@ -108,6 +108,11 @@ export default {
                     icon: "mdi-moped",
                 },
                 {
+                    name: "Command List",
+                    link: "/commandList",
+                    icon: "mdi-clipboard-list-outline"
+                },
+                {
                     name: "Admin",
                     permissions: [() => this.isUserAdmin],
                     icon: "mdi-wrench",
