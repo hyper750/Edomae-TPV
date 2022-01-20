@@ -8,6 +8,14 @@
 
         <v-row>
             <v-col cols="12">
+                <v-btn color="blue darken-1" text @click="generateSerieTicket">
+                    {{ $t("Generate daily tickets") }}
+                </v-btn>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col cols="12">
                 <h2>
                     {{ $t("Table commands") }}
                 </h2>
@@ -174,7 +182,7 @@ export default {
                 },
             ],
             deliveryCommandList: [],
-            
+
             selectedCommand: null,
             showCommandMealListDialog: false,
 
@@ -276,6 +284,24 @@ export default {
             }
 
             return "mdi-close";
+        },
+
+        generateSerieTicket() {
+            TicketCommandEndpoints.list()
+                .then(({ data }) => {
+                    for (const day of data) {
+                        const ticketWindow = window.open();
+                        ticketWindow.document.write(day.html);
+                        ticketWindow.print();
+                        ticketWindow.close();
+                    }
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't generate daily tickets")
+                    )
+                );
         },
     },
 };
