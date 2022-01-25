@@ -116,9 +116,6 @@ export default {
             description: "",
             descriptionRules: [
                 (f) => f.length <= 2048 || this.$t("Max 2048 characters"),
-                (f) =>
-                    f.length !== 0 ||
-                    this.$t("At least a character is required"),
             ],
 
             categories: [],
