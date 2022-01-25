@@ -4,6 +4,10 @@
             {{ $t("Command") }}
         </v-card-title>
 
+        <v-dialog v-model="showCommandMealConfirmation" eager>
+            <DeleteConfirmDialog @accept="() => deleteCommandMeal()" @deny="() => closeDeleteCommandMealConfirmation()" />
+        </v-dialog>
+
         <v-card-text>
             <v-container fluid>
                 <v-row>
@@ -61,7 +65,7 @@
                                             icon
                                             @click="
                                                 () =>
-                                                    deleteCommandMeal(
+                                                    selectCommandMealToDelete(
                                                         props.item
                                                     )
                                             "
@@ -162,6 +166,8 @@ export default {
 
             showPaymentProcess: false,
             deleteCommandConfirmation: false,
+            showCommandMealConfirmation: false,
+            selectedCommandMealToDelete: null,
         };
     },
 
@@ -368,9 +374,12 @@ export default {
                 );
         },
 
-        deleteCommandMeal(item) {
-            CommandMealEndpoints.delete(item.id)
-                .then(() => this.loadCommand(this.table, this.deliveryCommand))
+        deleteCommandMeal() {
+            CommandMealEndpoints.delete(this.selectedCommandMealToDelete.id)
+                .then(() => {
+                    this.closeDeleteCommandMealConfirmation();
+                    this.loadCommand(this.table, this.deliveryCommand);
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
@@ -381,6 +390,16 @@ export default {
 
         closeDeleteCommandConfirmation() {
             this.deleteCommandConfirmation = false;
+        },
+
+        selectCommandMealToDelete(commandMeal) {
+            this.selectedCommandMealToDelete = commandMeal;
+            this.showCommandMealConfirmation = true;
+        },
+
+        closeDeleteCommandMealConfirmation() {
+            this.selectedCommandMealToDelete = null;
+            this.showCommandMealConfirmation = false;
         },
     },
 };
