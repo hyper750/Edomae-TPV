@@ -26,15 +26,21 @@
                             <v-icon> mdi-cash-multiple </v-icon>
                             {{ $t("Pay") }}
                         </v-btn>
-                        <v-btn
-                            color="error darken-1"
-                            text
-                            @click="deleteCommand"
-                            :disabled="haveCommand"
-                        >
-                            <v-icon> mdi-delete </v-icon>
-                            {{ $t("Delete command") }}
-                        </v-btn>
+                        <v-dialog v-model="deleteCommandConfirmation" eager>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    v-on="on"
+                                    v-bind="attrs"
+                                    color="error darken-1"
+                                    text
+                                    :disabled="haveCommand"
+                                >
+                                    <v-icon> mdi-delete </v-icon>
+                                    {{ $t("Delete command") }}
+                                </v-btn>
+                            </template>
+                            <DeleteConfirmDialog @accept="deleteCommand" @deny="closeDeleteCommandConfirmation" />
+                        </v-dialog>
                     </v-col>
                 </v-row>
                 <v-row>
@@ -103,6 +109,7 @@ import CommandMealEndpoints from "../axios/api/commandMeal";
 import MenuMeals from "../components/MenuMeals";
 import PaymentProcess from "../components/PaymentProcess";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 
 export default {
     props: {
@@ -113,6 +120,7 @@ export default {
     components: {
         MenuMeals,
         PaymentProcess,
+        DeleteConfirmDialog,
     },
 
     data() {
@@ -153,6 +161,7 @@ export default {
             ],
 
             showPaymentProcess: false,
+            deleteCommandConfirmation: false,
         };
     },
 
@@ -341,6 +350,7 @@ export default {
         },
 
         deleteCommand() {
+            this.closeDeleteCommandConfirmation();
             if (!this.command) {
                 this.$store.dispatch(
                     "setGlobalError",
@@ -367,6 +377,10 @@ export default {
                         this.$i18n.t("Can't delete the command meal")
                     )
                 );
+        },
+
+        closeDeleteCommandConfirmation() {
+            this.deleteCommandConfirmation = false;
         },
     },
 };
