@@ -26,6 +26,10 @@
             <CommandMealListDialog :command="selectedCommand" />
         </v-dialog>
 
+        <v-dialog v-model="showCommandDeleteConfirmation" eager>
+            <DeleteConfirmDialog @accept="() => deleteCommand()" @deny="() => closeCommandDeleteConfirmation()" />
+        </v-dialog>
+
         <v-row>
             <v-col cols="12">
                 <v-data-table
@@ -49,7 +53,7 @@
                         </v-btn>
                     </template>
                     <template slot="item.delete" slot-scope="props">
-                        <v-btn icon @click="() => deleteCommand(props.item)">
+                        <v-btn icon @click="() => selectCommandToDelete(props.item)">
                             <v-icon dark> mdi-delete </v-icon>
                         </v-btn>
                     </template>
@@ -88,7 +92,7 @@
                         </v-btn>
                     </template>
                     <template slot="item.delete" slot-scope="props">
-                        <v-btn icon @click="() => deleteCommand(props.item)">
+                        <v-btn icon @click="() => selectCommandToDelete(props.item)">
                             <v-icon dark> mdi-delete </v-icon>
                         </v-btn>
                     </template>
@@ -103,11 +107,13 @@ import BreadCrumb from "../components/BreadCrumb";
 import CommandEndpoints from "../axios/api/command";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
 import CommandMealListDialog from "../components/CommandMealListDialog";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 
 export default {
     components: {
         BreadCrumb,
         CommandMealListDialog,
+        DeleteConfirmDialog,
     },
 
     mounted() {
@@ -191,6 +197,8 @@ export default {
 
             page_size: 50,
             page_num: 1,
+            showCommandDeleteConfirmation: false,
+            selectedCommandToDelete: null,
         };
     },
 
@@ -251,9 +259,12 @@ export default {
             this.showCommandMealListDialog = true;
         },
 
-        deleteCommand(command) {
-            CommandEndpoints.delete(command.id)
-                .then(() => this.loadCommands())
+        deleteCommand() {
+            CommandEndpoints.delete(this.selectedCommandToDelete.id)
+                .then(() => {
+                    this.closeCommandDeleteConfirmation();
+                    this.loadCommands();
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
@@ -302,6 +313,16 @@ export default {
                         this.$i18n.t("Can't generate daily tickets")
                     )
                 );
+        },
+
+        selectCommandToDelete(command) {
+            this.selectedCommandToDelete = command;
+            this.showCommandDeleteConfirmation = true;
+        },
+
+        closeCommandDeleteConfirmation() {
+            this.selectedCommandToDelete = null;
+            this.showCommandDeleteConfirmation = false;
         },
     },
 };
