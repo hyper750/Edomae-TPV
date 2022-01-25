@@ -4,13 +4,17 @@
             {{ $t("Command meal") }}
         </v-card-title>
 
+        <v-dialog v-model="showDeleteCommandMealConfirmation" eager>
+            <DeleteConfirmDialog @deny="() => closeDeleteCommandMealConfirmation()" @accept="() => deleteCommandMeal()"/>
+        </v-dialog>
+
         <v-card-text>
             <v-data-table
                 :headers="commandMealsHeaders"
                 :items="getCommandMealItems"
             >
                 <template slot="item.delete" slot-scope="props">
-                    <v-btn icon @click="() => deleteCommandMeal(props.item)">
+                    <v-btn icon @click="() => selectCommandMealToDelete(props.item)">
                         <v-icon dark>mdi-delete</v-icon>
                     </v-btn>
                 </template>
@@ -22,10 +26,15 @@
 <script>
 import MealEndpoints from "../axios/api/meal";
 import CommandMealEndpoints from "../axios/api/commandMeal";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
 
 export default {
     props: {
         command: Object,
+    },
+
+    components: {
+        DeleteConfirmDialog,
     },
 
     mounted() {
@@ -77,6 +86,8 @@ export default {
                     value: "delete",
                 },
             ],
+            showDeleteCommandMealConfirmation: false,
+            commandMealSelectedToDelete: null,
         };
     },
 
@@ -136,15 +147,28 @@ export default {
                 );
         },
 
-        deleteCommandMeal(command) {
-            CommandMealEndpoints.delete(command.id)
-                .then(() => this.loadCommandMeals(this.command))
+        deleteCommandMeal() {
+            CommandMealEndpoints.delete(this.commandMealSelectedToDelete.id)
+                .then(() => {
+                    this.closeDeleteCommandMealConfirmation();
+                    this.loadCommandMeals(this.command);
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Can't delete command meal")
                     )
                 );
+        },
+
+        selectCommandMealToDelete(commandMeal) {
+            this.commandMealSelectedToDelete = commandMeal;
+            this.showDeleteCommandMealConfirmation = true;
+        },
+
+        closeDeleteCommandMealConfirmation() {
+            this.commandMealSelectedToDelete = null;
+            this.showDeleteCommandMealConfirmation = false;
         },
     },
 };
