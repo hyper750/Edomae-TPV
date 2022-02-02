@@ -118,7 +118,6 @@ import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 export default {
     props: {
         table: Number,
-        deliveryCommand: Boolean,
     },
 
     components: {
@@ -173,15 +172,12 @@ export default {
 
     mounted() {
         this.loadMenu();
-        this.loadCommand(this.table, this.deliveryCommand);
+        this.loadCommand(this.table);
     },
 
     watch: {
         table: function (newValue) {
-            this.loadCommand(newValue, this.deliveryCommand);
-        },
-        deliveryCommand: function (newValue) {
-            this.loadCommand(null, newValue);
+            this.loadCommand(newValue);
         },
     },
 
@@ -255,11 +251,9 @@ export default {
                 );
         },
 
-        async loadCommand(tableId, deliveryCommand) {
-            if (tableId && !deliveryCommand) {
+        async loadCommand(tableId) {
+            if (tableId) {
                 await this.loadTableCommand(tableId);
-            } else if (!tableId && deliveryCommand) {
-                // TODO: Load delivery command
             }
 
             // Reset command meals if there's no command available
@@ -300,7 +294,7 @@ export default {
 
         async createCommand() {
             const commandData = {
-                is_home_delivery: this.deliveryCommand,
+                is_home_delivery: false,
                 table: this.table,
             };
             await CommandEndpoints.post(commandData)
@@ -314,7 +308,7 @@ export default {
         },
 
         mealAdded() {
-            this.loadCommand(this.table, this.deliveryCommand);
+            this.loadCommand(this.table);
         },
 
         print() {
@@ -352,7 +346,7 @@ export default {
         commandPaid() {
             this.closePaymentProcess();
             // Reload command
-            this.loadCommand(this.table, this.deliveryCommand);
+            this.loadCommand(this.table);
         },
 
         deleteCommand() {
@@ -365,7 +359,7 @@ export default {
                 return;
             }
             CommandEndpoints.delete(this.command.id)
-                .then(() => this.loadCommand(this.table, this.deliveryCommand))
+                .then(() => this.loadCommand(this.table))
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
@@ -378,7 +372,7 @@ export default {
             CommandMealEndpoints.delete(this.selectedCommandMealToDelete.id)
                 .then(() => {
                     this.closeDeleteCommandMealConfirmation();
-                    this.loadCommand(this.table, this.deliveryCommand);
+                    this.loadCommand(this.table);
                 })
                 .catch(() =>
                     this.$store.dispatch(
