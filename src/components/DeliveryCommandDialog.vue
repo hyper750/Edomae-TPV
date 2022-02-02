@@ -87,6 +87,12 @@
 </template>
 
 <script>
+/**
+ * TODO:
+ * - Be able to pay
+ * - Be able to add address to the command
+ * - Be able to print the ticket
+ */
 import MenuMeals from "../components/MenuMeals";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 import MealEndpoints from "../axios/api/meal";
