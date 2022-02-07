@@ -142,15 +142,14 @@ export default {
         },
 
         loadCommands() {
-            const now = new Date();
-            // Load command for the current day
-            const floor = 1000 * 60 * 60 * 24;
-            const startDate = new Date(now.getTime() - (now.getTime() % floor));
-            const endDate = new Date(startDate.getTime() + floor - 1);
+            // Load delivery commands from the last 24h
+            const dayTime = 1000 * 60 * 60 * 24;
+            const endDate = new Date();
+            const startDate = new Date(endDate.getTime() - dayTime);
             const filters = {
                 is_home_delivery: true,
                 creation_date__gte: startDate.toISOString(),
-                creation_date__lte: endDate,
+                creation_date__lte: endDate.toISOString(),
             };
             CommandEndpoints.list(filters)
                 .then(({ data }) => (this.commandList = data))
