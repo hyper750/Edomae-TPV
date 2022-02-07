@@ -32,6 +32,13 @@
             </v-col>
         </v-row>
 
+        <v-dialog v-model="showCommandDeleteDialog" eager>
+            <DeleteConfirmDialog
+                @accept="() => deleteCommand()"
+                @deny="() => closeCommandDeleteDialog()"
+            />
+        </v-dialog>
+
         <v-row>
             <v-col md="12">
                 <v-data-table
@@ -55,7 +62,10 @@
                         </v-btn>
                     </template>
                     <template slot="item.delete" slot-scope="props">
-                        <v-btn icon @click="() => deleteCommand(props.item)">
+                        <v-btn
+                            icon
+                            @click="() => selectCommandToDelete(props.item)"
+                        >
                             <v-icon dark> mdi-delete </v-icon>
                         </v-btn>
                     </template>
@@ -69,11 +79,13 @@
 import BreadCrumb from "../components/BreadCrumb";
 import DeliveryCommandDialog from "../components/DeliveryCommandDialog";
 import CommandEndpoints from "../axios/api/command";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 
 export default {
     components: {
         BreadCrumb,
         DeliveryCommandDialog,
+        DeleteConfirmDialog,
     },
 
     mounted() {
@@ -114,6 +126,8 @@ export default {
                     value: "delete",
                 },
             ],
+            commandToDelete: null,
+            showCommandDeleteDialog: false,
         };
     },
 
@@ -166,9 +180,26 @@ export default {
             console.log(command);
         },
 
-        deleteCommand(command) {
-            // TODO:
-            console.log(command);
+        selectCommandToDelete(command) {
+            this.commandToDelete = command.id;
+            this.showCommandDeleteDialog = true;
+        },
+
+        closeCommandDeleteDialog() {
+            this.commandToDelete = null;
+            this.showCommandDeleteDialog = false;
+        },
+
+        deleteCommand() {
+            CommandEndpoints.delete(this.commandToDelete)
+                .then(() => this.loadCommands())
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't delete the command")
+                    )
+                )
+                .finally(() => this.closeCommandDeleteDialog());
         },
     },
 };
