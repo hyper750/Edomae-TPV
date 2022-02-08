@@ -80,6 +80,7 @@ import BreadCrumb from "../components/BreadCrumb";
 import DeliveryCommandDialog from "../components/DeliveryCommandDialog";
 import CommandEndpoints from "../axios/api/command";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
+import TicketCommandEndpoints from "../axios/api/ticketCommand";
 
 export default {
     components: {
@@ -175,8 +176,19 @@ export default {
         },
 
         printCommand(command) {
-            // TODO:
-            console.log(command);
+            TicketCommandEndpoints.get(command.id)
+                .then(({ data }) => {
+                    const ticketWindow = window.open();
+                    ticketWindow.document.write(data);
+                    ticketWindow.print();
+                    ticketWindow.close();
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't print that commands")
+                    )
+                );
         },
 
         selectCommandToDelete(command) {
