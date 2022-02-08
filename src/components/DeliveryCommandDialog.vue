@@ -31,6 +31,15 @@
                             <v-icon> mdi-delete </v-icon>
                             {{ $t("Delete command") }}
                         </v-btn>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            :disabled="withoutCommand"
+                            @click="() => printCommand()"
+                        >
+                            <v-icon>mdi-printer</v-icon>
+                            {{ $t("Print") }}
+                        </v-btn>
                     </v-col>
                 </v-row>
 
@@ -91,13 +100,13 @@
  * TODO:
  * - Be able to pay
  * - Be able to add address to the command
- * - Be able to print the ticket
  */
 import MenuMeals from "../components/MenuMeals";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 import MealEndpoints from "../axios/api/meal";
 import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
+import TicketCommandEndpoints from "../axios/api/ticketCommand";
 
 export default {
     components: {
@@ -255,7 +264,7 @@ export default {
                 .finally(() => {
                     this.command = null;
                     this.commandMeals = [];
-                    this.closeCommandDeleteDialog()
+                    this.closeCommandDeleteDialog();
                 });
         },
 
@@ -263,6 +272,22 @@ export default {
             this.$refs.menuMeals.reset();
             this.command = null;
             this.commandMeals = [];
+        },
+
+        printCommand() {
+            TicketCommandEndpoints.get(this.command.id)
+                .then(({ data }) => {
+                    const ticketWindow = window.open();
+                    ticketWindow.document.write(data);
+                    ticketWindow.print();
+                    ticketWindow.close();
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't print that ticket")
+                    )
+                );
         },
     },
 
