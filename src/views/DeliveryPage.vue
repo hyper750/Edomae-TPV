@@ -143,14 +143,11 @@ export default {
         },
 
         loadCommands() {
-            // Load delivery commands from the last 24h
-            const dayTime = 1000 * 60 * 60 * 24;
-            const endDate = new Date();
-            const startDate = new Date(endDate.getTime() - dayTime);
             const filters = {
                 is_home_delivery: true,
-                creation_date__gte: startDate.toISOString(),
-                creation_date__lte: endDate.toISOString(),
+                page_size: 50,
+                // TODO: Add pagination
+                page: 1
             };
             CommandEndpoints.list(filters)
                 .then(({ data }) => (this.commandList = data))
