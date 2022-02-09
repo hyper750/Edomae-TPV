@@ -18,6 +18,10 @@
             />
         </v-dialog>
 
+        <v-dialog v-model="showPaymentProcess" eager>
+            <PaymentProcess :command="getCommand()" @pay="() => paymentDone()" @close="() => closePaymentProcess()"/>
+        </v-dialog>
+
         <v-card-text>
             <v-container fluid>
                 <v-row>
@@ -30,6 +34,15 @@
                         >
                             <v-icon> mdi-delete </v-icon>
                             {{ $t("Delete command") }}
+                        </v-btn>
+                        <v-btn
+                            color="success darken-1"
+                            text
+                            :disabled="!isAbleToPay"
+                            @click="() => openPaymentProcess()"
+                        >
+                            <v-icon>mdi-cash-multiple</v-icon>
+                            {{ $t("Pay") }}
                         </v-btn>
                         <v-btn
                             color="blue darken-1"
@@ -98,7 +111,6 @@
 <script>
 /**
  * TODO:
- * - Be able to pay
  * - Be able to add address to the command
  */
 import MenuMeals from "../components/MenuMeals";
@@ -107,6 +119,7 @@ import MealEndpoints from "../axios/api/meal";
 import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
+import PaymentProcess from "../components/PaymentProcess";
 
 export default {
     props: {
@@ -116,6 +129,7 @@ export default {
     components: {
         MenuMeals,
         DeleteConfirmDialog,
+        PaymentProcess,
     },
 
     data() {
@@ -160,6 +174,8 @@ export default {
             commandMealDeleteDialogOpen: false,
 
             commandDeleteDialogOpen: false,
+
+            showPaymentProcess: false,
         };
     },
 
@@ -305,6 +321,19 @@ export default {
                     )
                 );
         },
+
+        openPaymentProcess() {
+            this.showPaymentProcess = true;
+        },
+
+        closePaymentProcess() {
+            this.showPaymentProcess = false;
+        },
+
+        paymentDone() {
+            this.closePaymentProcess();
+            this.$emit("paymentDone");
+        },
     },
 
     computed: {
@@ -345,6 +374,10 @@ export default {
 
         withoutCommand() {
             return !this.getCommand();
+        },
+
+        isAbleToPay() {
+            return !this.withoutCommand && !this.getCommand().paid;
         },
     },
 };

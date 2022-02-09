@@ -15,6 +15,7 @@
                 ref="deliveryCommandDialog"
                 :editCommand="commandToEdit"
                 @deleteCommand="() => onDeleteCommandFromDeliveryDialog()"
+                @paymentDone="() => paymentDone()"
             />
         </v-dialog>
 
@@ -224,6 +225,10 @@ export default {
         },
 
         onDeleteCommandFromDeliveryDialog() {
+            this.onCommandDialogClose();
+        },
+
+        paymentDone() {
             this.onCommandDialogClose();
         },
     },
