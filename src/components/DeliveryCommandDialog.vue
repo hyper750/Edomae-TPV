@@ -280,6 +280,7 @@ export default {
                     this.command = null;
                     this.commandMeals = [];
                     this.closeCommandDeleteDialog();
+                    this.$emit("deleteCommand");
                 });
         },
 

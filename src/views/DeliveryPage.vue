@@ -14,6 +14,7 @@
             <DeliveryCommandDialog
                 ref="deliveryCommandDialog"
                 :editCommand="commandToEdit"
+                @deleteCommand="() => onDeleteCommandFromDeliveryDialog()"
             />
         </v-dialog>
 
@@ -148,6 +149,7 @@ export default {
         },
 
         onCommandDialogClose() {
+            this.deliveryCommandDialogOpen = false;
             this.$refs.deliveryCommandDialog.reset();
             this.commandToEdit = null;
             this.loadCommands();
@@ -180,7 +182,7 @@ export default {
 
         detailCommand(command) {
             this.commandToEdit = command;
-            this.openDeliveryCommandDialog()
+            this.openDeliveryCommandDialog();
         },
 
         printCommand(command) {
@@ -219,6 +221,10 @@ export default {
                     )
                 )
                 .finally(() => this.closeCommandDeleteDialog());
+        },
+
+        onDeleteCommandFromDeliveryDialog() {
+            this.onCommandDialogClose();
         },
     },
 };
