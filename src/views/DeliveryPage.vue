@@ -11,7 +11,10 @@
             eager
             @click:outside="() => onCommandDialogClose()"
         >
-            <DeliveryCommandDialog ref="deliveryCommandDialog" />
+            <DeliveryCommandDialog
+                ref="deliveryCommandDialog"
+                :editCommand="commandToEdit"
+            />
         </v-dialog>
 
         <v-row>
@@ -104,7 +107,7 @@ export default {
                 },
                 {
                     text: this.$i18n.t("Date"),
-                    value: "creation_date"
+                    value: "creation_date",
                 },
                 {
                     text: this.$i18n.t("Delivery address"),
@@ -131,8 +134,11 @@ export default {
                     value: "delete",
                 },
             ],
+
             commandToDelete: null,
             showCommandDeleteDialog: false,
+
+            commandToEdit: null,
         };
     },
 
@@ -143,6 +149,7 @@ export default {
 
         onCommandDialogClose() {
             this.$refs.deliveryCommandDialog.reset();
+            this.commandToEdit = null;
             this.loadCommands();
         },
 
@@ -151,7 +158,7 @@ export default {
                 is_home_delivery: true,
                 page_size: 50,
                 // TODO: Add pagination
-                page: 1
+                page: 1,
             };
             CommandEndpoints.list(filters)
                 .then(({ data }) => (this.commandList = data))
@@ -172,8 +179,8 @@ export default {
         },
 
         detailCommand(command) {
-            // TODO:
-            console.log(command);
+            this.commandToEdit = command;
+            this.openDeliveryCommandDialog()
         },
 
         printCommand(command) {

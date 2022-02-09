@@ -83,7 +83,7 @@
                     <v-col md="6" cols="12">
                         <MenuMeals
                             :meals="mealsMenu"
-                            :command="command"
+                            :command="getCommand()"
                             ref="menuMeals"
                             @createCommand="() => createCommand()"
                             @mealAdded="() => mealAdded()"
@@ -109,6 +109,10 @@ import CommandMealEndpoints from "../axios/api/commandMeal";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
 
 export default {
+    props: {
+        editCommand: Object,
+    },
+
     components: {
         MenuMeals,
         DeleteConfirmDialog,
@@ -164,7 +168,18 @@ export default {
         this.loadCommand();
     },
 
+    watch: {
+        editCommand: function () {
+            this.command = null;
+            this.loadCommand();
+        },
+    },
+
     methods: {
+        getCommand() {
+            return this.editCommand || this.command;
+        },
+
         async loadMenu() {
             await MealEndpoints.list({ enabled: true })
                 .then(({ data }) => (this.mealsMenu = data))
@@ -191,7 +206,7 @@ export default {
         },
 
         async loadCommand() {
-            if (this.command) {
+            if (this.getCommand()) {
                 await this.loadCommandMeal();
             } else {
                 this.commandMeals = [];
@@ -200,7 +215,7 @@ export default {
 
         async loadCommandMeal() {
             const filters = {
-                command: this.command.id,
+                command: this.getCommand().id,
             };
 
             CommandMealEndpoints.list(filters)
@@ -254,7 +269,7 @@ export default {
         },
 
         deleteCommand() {
-            CommandEndpoints.delete(this.command.id)
+            CommandEndpoints.delete(this.getCommand().id)
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
@@ -275,7 +290,7 @@ export default {
         },
 
         printCommand() {
-            TicketCommandEndpoints.get(this.command.id)
+            TicketCommandEndpoints.get(this.getCommand().id)
                 .then(({ data }) => {
                     const ticketWindow = window.open();
                     ticketWindow.document.write(data);
@@ -328,7 +343,7 @@ export default {
         },
 
         withoutCommand() {
-            return !this.command;
+            return !this.getCommand();
         },
     },
 };
