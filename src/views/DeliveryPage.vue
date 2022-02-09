@@ -103,6 +103,10 @@ export default {
                     value: "id",
                 },
                 {
+                    text: this.$i18n.t("Date"),
+                    value: "creation_date"
+                },
+                {
                     text: this.$i18n.t("Delivery address"),
                     value: "delivery_address",
                 },
