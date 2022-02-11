@@ -19,7 +19,11 @@
         </v-dialog>
 
         <v-dialog v-model="showPaymentProcess" eager>
-            <PaymentProcess :command="getCommand()" @pay="() => paymentDone()" @close="() => closePaymentProcess()"/>
+            <PaymentProcess
+                :command="getCommand()"
+                @pay="() => paymentDone()"
+                @close="() => closePaymentProcess()"
+            />
         </v-dialog>
 
         <v-card-text>
@@ -43,6 +47,14 @@
                         >
                             <v-icon>mdi-printer</v-icon>
                             {{ $t("Print") }}
+                        </v-btn>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            :disabled="withoutCommand"
+                        >
+                            <v-icon>mdi-map-marker</v-icon>
+                            {{ $t("Address") }}
                         </v-btn>
                         <v-btn
                             color="success darken-1"
