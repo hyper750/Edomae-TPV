@@ -36,15 +36,6 @@
                             {{ $t("Delete command") }}
                         </v-btn>
                         <v-btn
-                            color="success darken-1"
-                            text
-                            :disabled="!isAbleToPay"
-                            @click="() => openPaymentProcess()"
-                        >
-                            <v-icon>mdi-cash-multiple</v-icon>
-                            {{ $t("Pay") }}
-                        </v-btn>
-                        <v-btn
                             color="blue darken-1"
                             text
                             :disabled="withoutCommand"
@@ -52,6 +43,15 @@
                         >
                             <v-icon>mdi-printer</v-icon>
                             {{ $t("Print") }}
+                        </v-btn>
+                        <v-btn
+                            color="success darken-1"
+                            text
+                            :disabled="!isAbleToPay"
+                            @click="() => openPaymentProcess()"
+                        >
+                            <v-icon>mdi-cash-multiple</v-icon>
+                            {{ $t("Pay") }}
                         </v-btn>
                     </v-col>
                 </v-row>

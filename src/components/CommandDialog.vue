@@ -12,6 +12,21 @@
             <v-container fluid>
                 <v-row>
                     <v-col md="12" cols="12">
+                        <v-dialog v-model="deleteCommandConfirmation" eager>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    v-on="on"
+                                    v-bind="attrs"
+                                    color="error darken-1"
+                                    text
+                                    :disabled="haveCommand"
+                                >
+                                    <v-icon> mdi-delete </v-icon>
+                                    {{ $t("Delete command") }}
+                                </v-btn>
+                            </template>
+                            <DeleteConfirmDialog @accept="deleteCommand" @deny="closeDeleteCommandConfirmation" />
+                        </v-dialog>
                         <v-btn
                             color="blue darken-1"
                             text
@@ -30,21 +45,6 @@
                             <v-icon> mdi-cash-multiple </v-icon>
                             {{ $t("Pay") }}
                         </v-btn>
-                        <v-dialog v-model="deleteCommandConfirmation" eager>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                    v-on="on"
-                                    v-bind="attrs"
-                                    color="error darken-1"
-                                    text
-                                    :disabled="haveCommand"
-                                >
-                                    <v-icon> mdi-delete </v-icon>
-                                    {{ $t("Delete command") }}
-                                </v-btn>
-                            </template>
-                            <DeleteConfirmDialog @accept="deleteCommand" @deny="closeDeleteCommandConfirmation" />
-                        </v-dialog>
                     </v-col>
                 </v-row>
                 <v-row>
