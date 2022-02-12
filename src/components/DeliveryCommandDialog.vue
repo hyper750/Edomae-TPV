@@ -26,6 +26,14 @@
             />
         </v-dialog>
 
+        <v-dialog v-model="showAddressDialog" eager>
+            <AddressDialog
+                :command="getCommand()"
+                @save="() => onSaveAddressDialog()"
+                @close="() => onCloseAddressDialog()"
+            />
+        </v-dialog>
+
         <v-card-text>
             <v-container fluid>
                 <v-row>
@@ -52,6 +60,7 @@
                             color="blue darken-1"
                             text
                             :disabled="withoutCommand"
+                            @click="() => openAddressDialog()"
                         >
                             <v-icon>mdi-map-marker</v-icon>
                             {{ $t("Address") }}
@@ -121,10 +130,6 @@
 </template>
 
 <script>
-/**
- * TODO:
- * - Be able to add address to the command
- */
 import MenuMeals from "../components/MenuMeals";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 import MealEndpoints from "../axios/api/meal";
@@ -132,6 +137,7 @@ import CommandEndpoints from "../axios/api/command";
 import CommandMealEndpoints from "../axios/api/commandMeal";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
 import PaymentProcess from "../components/PaymentProcess";
+import AddressDialog from "../components/AddressDialog";
 
 export default {
     props: {
@@ -142,6 +148,7 @@ export default {
         MenuMeals,
         DeleteConfirmDialog,
         PaymentProcess,
+        AddressDialog,
     },
 
     data() {
@@ -188,6 +195,8 @@ export default {
             commandDeleteDialogOpen: false,
 
             showPaymentProcess: false,
+
+            showAddressDialog: false,
         };
     },
 
@@ -345,6 +354,22 @@ export default {
         paymentDone() {
             this.closePaymentProcess();
             this.$emit("paymentDone");
+        },
+
+        openAddressDialog() {
+            this.showAddressDialog = true;
+        },
+
+        closeAddressDialog() {
+            this.showAddressDialog = false;
+        },
+
+        onCloseAddressDialog() {
+            this.closeAddressDialog();
+        },
+
+        onSaveAddressDialog() {
+            this.closeAddressDialog();
         },
     },
 
