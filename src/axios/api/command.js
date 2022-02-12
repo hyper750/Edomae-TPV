@@ -14,13 +14,14 @@ export default {
     },
 
     async post(command) {
-        const { table, table_name, is_home_delivery, delivery_address, discount, extra } = command;
+        const { table, table_name, is_home_delivery, delivery_address, delivery_details, discount, extra } = command;
 
         let formData = new FormData();
         formData.append('table', table);
         formData.append('table_name', table_name);
         formData.append('is_home_delivery', is_home_delivery);
         formData.append('delivery_address', delivery_address);
+        formData.append('delivery_details', delivery_details);
         formData.append('discount', discount);
         formData.append('extra', extra);
         formData = AxiosHelper.removeOptionalValues(formData);
@@ -29,13 +30,14 @@ export default {
     },
 
     async put(id, command) {
-        const { table, table_name, is_home_delivery, delivery_address, discount, extra, paid, payment_method } = command;
+        const { table, table_name, is_home_delivery, delivery_address, delivery_details, discount, extra, paid, payment_method } = command;
 
         let formData = new FormData();
         formData.append('table', table);
         formData.append('table_name', table_name);
         formData.append('is_home_delivery', is_home_delivery);
         formData.append('delivery_address', delivery_address);
+        formData.append('delivery_details', delivery_details);
         formData.append('discount', discount);
         formData.append('extra', extra);
         formData.append('paid', paid);
