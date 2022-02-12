@@ -55,14 +55,20 @@ export default {
         };
     },
 
-    methods: {
-        reset() {
-            this.address = null;
-            this.addressDetails = null;
+    watch: {
+        command: function (newValue) {
+            if (!newValue) {
+                return;
+            }
+            this.address = newValue.delivery_address;
+            this.addressDetails = newValue.delivery_details;
         },
+    },
 
+    methods: {
         close() {
-            this.reset();
+            this.address = this.command.delivery_address;
+            this.addressDetails = this.command.delivery_details;
             this.$emit("close");
         },
 
@@ -78,8 +84,7 @@ export default {
                         "setGlobalError",
                         this.$i18n.t("Can't save address to that command")
                     )
-                )
-                .finally(() => this.reset());
+                );
         },
     },
 };
