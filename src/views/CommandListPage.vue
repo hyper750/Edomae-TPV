@@ -83,6 +83,9 @@
                 <v-data-table
                     :headers="deliveryCommandListHeaders"
                     :items="getDeliveryItems"
+                    :server-items-length="deliveryTotalCommands"
+                    :options.sync="deliveryOptions"
+                    :loading="deliveryIsLoading"
                     class="elevation-1"
                 >
                     <template slot="item.paid" slot-scope="props">
@@ -134,6 +137,12 @@ export default {
                 this.loadTableCommands();
             },
             deep: true,
+        },
+        deliveryOptions: {
+            handler() {
+                this.loadDeliveryCommands();
+            },
+            deep: true
         },
     },
 
@@ -209,14 +218,16 @@ export default {
             // creation_date__gte: startDate.toISOString(),
             // creation_date__lte: endDate.toISOString(),
 
-            page_size: 50,
-            page_num: 1,
             showCommandDeleteConfirmation: false,
             selectedCommandToDelete: null,
 
             tableOptions: {},
             tableIsLoading: false,
             tableTotalCommands: 0,
+
+            deliveryOptions: {},
+            deliveryIsLoading: false,
+            deliveryTotalCommands: 0,
         };
     },
 
@@ -260,19 +271,32 @@ export default {
                 });
         },
 
-        loadDeliveryCommands(filters) {
+        loadDeliveryCommands() {
             const deliveryFilters = {
-                ...filters,
+                page_size: this.deliveryOptions.itemsPerPage,
+                page_num: this.deliveryOptions.page,
                 is_home_delivery: true,
             };
+            this.deliveryIsLoading = true;
             CommandEndpoints.list(deliveryFilters)
-                .then(({ data }) => (this.deliveryCommandList = data))
+                .then(({ data }) => {
+                    this.deliveryCommandList = data;
+                    // TODO: Return the total number of items from the backend
+                    if(data.length % this.deliveryOptions.itemsPerPage !== 0) {
+                        this.deliveryTotalCommands = (this.deliveryOptions.itemsPerPage * (this.deliveryOptions.page - 1)) + data.length;
+                    }
+                    else {
+                        this.deliveryTotalCommands = (this.deliveryOptions.itemsPerPage * this.deliveryOptions.page) + this.deliveryOptions.itemsPerPage;
+                    }
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Can't load delivery commands")
                     )
-                );
+                ).finally(() => {
+                    this.deliveryIsLoading = false;
+                });
         },
 
         detailCommand(command) {
