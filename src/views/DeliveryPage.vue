@@ -33,7 +33,7 @@
 
         <v-row>
             <v-col md="12">
-                <h2>{{ $t("Today's commands") }}</h2>
+                <h2>{{ $t("Delivery commands") }}</h2>
             </v-col>
         </v-row>
 
@@ -49,6 +49,9 @@
                 <v-data-table
                     :headers="commandHeaders"
                     :items="commandList"
+                    :server-items-length="deliveryCommandTotalItems"
+                    :options.sync="deliveryCommandOptions"
+                    :loading="deliveryCommandIsLoading"
                     class="elevation-1"
                 >
                     <template slot="item.paid" slot-scope="props">
@@ -94,10 +97,6 @@ export default {
         DeleteConfirmDialog,
     },
 
-    mounted() {
-        this.loadCommands();
-    },
-
     data() {
         return {
             deliveryCommandDialogOpen: false,
@@ -141,7 +140,20 @@ export default {
             showCommandDeleteDialog: false,
 
             commandToEdit: null,
+
+            deliveryCommandOptions: {},
+            deliveryCommandIsLoading: false,
+            deliveryCommandTotalItems: 0,
         };
+    },
+
+    watch: {
+        deliveryCommandOptions: {
+            handler() {
+                this.loadCommands();
+            },
+            deep: true
+        }
     },
 
     methods: {
@@ -159,18 +171,30 @@ export default {
         loadCommands() {
             const filters = {
                 is_home_delivery: true,
-                page_size: 50,
-                // TODO: Add pagination
-                page: 1,
+                page_size: this.deliveryCommandOptions.itemsPerPage,
+                page_num: this.deliveryCommandOptions.page,
             };
+            this.deliveryCommandIsLoading = true;
             CommandEndpoints.list(filters)
-                .then(({ data }) => (this.commandList = data))
+                .then(({ data }) => {
+                    this.commandList = data;
+                    // TODO: Return the total number of items from the backend
+                    if(data.length % this.deliveryCommandOptions.itemsPerPage !== 0) {
+                        this.deliveryCommandTotalItems = (this.deliveryCommandOptions.itemsPerPage * (this.deliveryCommandOptions.page - 1)) + data.length;
+                    }
+                    else {
+                        this.deliveryCommandTotalItems = (this.deliveryCommandOptions.itemsPerPage * this.deliveryCommandOptions.page) + this.deliveryCommandOptions.itemsPerPage;
+                    }
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Can't load commands")
                     )
-                );
+                )
+                .finally(() => {
+                    this.deliveryCommandIsLoading = false;
+                });
         },
 
         getPaidIcon(paid) {
