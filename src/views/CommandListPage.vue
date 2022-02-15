@@ -27,7 +27,10 @@
         </v-dialog>
 
         <v-dialog v-model="showCommandDeleteConfirmation" eager>
-            <DeleteConfirmDialog @accept="() => deleteCommand()" @deny="() => closeCommandDeleteConfirmation()" />
+            <DeleteConfirmDialog
+                @accept="() => deleteCommand()"
+                @deny="() => closeCommandDeleteConfirmation()"
+            />
         </v-dialog>
 
         <v-row>
@@ -35,6 +38,9 @@
                 <v-data-table
                     :headers="tableCommandListHeaders"
                     :items="getTableItems"
+                    :loading="tableIsLoading"
+                    :server-items-length="tableTotalCommands"
+                    :options.sync="tableOptions"
                     class="elevation-1"
                 >
                     <template slot="item.paid" slot-scope="props">
@@ -53,7 +59,10 @@
                         </v-btn>
                     </template>
                     <template slot="item.delete" slot-scope="props">
-                        <v-btn icon @click="() => selectCommandToDelete(props.item)">
+                        <v-btn
+                            icon
+                            @click="() => selectCommandToDelete(props.item)"
+                        >
                             <v-icon dark> mdi-delete </v-icon>
                         </v-btn>
                     </template>
@@ -92,7 +101,10 @@
                         </v-btn>
                     </template>
                     <template slot="item.delete" slot-scope="props">
-                        <v-btn icon @click="() => selectCommandToDelete(props.item)">
+                        <v-btn
+                            icon
+                            @click="() => selectCommandToDelete(props.item)"
+                        >
                             <v-icon dark> mdi-delete </v-icon>
                         </v-btn>
                     </template>
@@ -116,14 +128,16 @@ export default {
         DeleteConfirmDialog,
     },
 
-    mounted() {
-        this.loadCommands();
+    watch: {
+        tableOptions: {
+            handler() {
+                this.loadTableCommands();
+            },
+            deep: true,
+        },
     },
 
     data() {
-        // const endDate = new Date();
-        // const shiftTime = 7 * 24 * 60* 60 * 1000;
-        // const startDate = new Date(endDate.getTime() - shiftTime);
         return {
             tableCommandListHeaders: [
                 {
@@ -199,6 +213,10 @@ export default {
             page_num: 1,
             showCommandDeleteConfirmation: false,
             selectedCommandToDelete: null,
+
+            tableOptions: {},
+            tableIsLoading: false,
+            tableTotalCommands: 0,
         };
     },
 
@@ -213,19 +231,33 @@ export default {
     },
 
     methods: {
-        loadTableCommands(filters) {
+        loadTableCommands() {
             const tableFilters = {
-                ...filters,
+                page_size: this.tableOptions.itemsPerPage,
+                page_num: this.tableOptions.page,
                 is_home_delivery: false,
             };
+            this.tableIsLoading = true;
             CommandEndpoints.list(tableFilters)
-                .then(({ data }) => (this.tableCommandList = data))
+                .then(({ data }) => {
+                    this.tableCommandList = data;
+                    // TODO: Return the total number of items from the backend
+                    if(data.length % this.tableOptions.itemsPerPage !== 0) {
+                        this.tableTotalCommands = (this.tableOptions.itemsPerPage * (this.tableOptions.page - 1)) + data.length;
+                    }
+                    else{
+                        this.tableTotalCommands = (this.tableOptions.itemsPerPage * this.tableOptions.page) + this.tableOptions.itemsPerPage;
+                    }
+                })
                 .catch(() =>
                     this.$store.dispatch(
                         "setGlobalError",
                         this.$i18n.t("Can't load table commands")
                     )
-                );
+                )
+                .finally(() => {
+                    this.tableIsLoading = false;
+                });
         },
 
         loadDeliveryCommands(filters) {
@@ -243,17 +275,6 @@ export default {
                 );
         },
 
-        loadCommands() {
-            const filters = {
-                page_size: this.page_size,
-                page_num: this.page_num,
-                // creation_date__gte: this.creation_date__gte,
-                // creation_date__lte: this.creation_date__lte
-            };
-            this.loadTableCommands(filters);
-            this.loadDeliveryCommands(filters);
-        },
-
         detailCommand(command) {
             this.selectedCommand = command;
             this.showCommandMealListDialog = true;
@@ -263,7 +284,8 @@ export default {
             CommandEndpoints.delete(this.selectedCommandToDelete.id)
                 .then(() => {
                     this.closeCommandDeleteConfirmation();
-                    this.loadCommands();
+                    this.loadTableCommands();
+                    this.loadDeliveryCommands();
                 })
                 .catch(() =>
                     this.$store.dispatch(
