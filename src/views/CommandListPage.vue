@@ -33,10 +33,7 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col
-                                cols="12"
-                                class="text-right"
-                            >
+                            <v-col cols="12" class="text-right">
                                 <v-btn
                                     color="blue darken-1"
                                     text
@@ -415,7 +412,12 @@ export default {
         },
 
         generateSerieTicket() {
-            TicketCommandEndpoints.list()
+            const filters = {
+                creation_date__gte: this.getStartDate.toISOString(),
+                creation_date__lte: this.getEndDate.toISOString(),
+            };
+
+            TicketCommandEndpoints.list(filters)
                 .then(({ data }) => {
                     for (const day of data) {
                         const ticketWindow = window.open();
