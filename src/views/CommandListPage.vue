@@ -278,6 +278,16 @@ export default {
         getDeliveryItems() {
             return this.deliveryCommandList;
         },
+
+        getStartDate() {
+            const startDateTimestamp = Math.min(...this.dateFilter.map(d => new Date(d)));
+            return new Date(startDateTimestamp);
+        },
+
+        getEndDate() {
+            const endDateTimestamp = Math.max(...this.dateFilter.map(d => new Date(d)));
+            return new Date(endDateTimestamp)
+        },
     },
 
     methods: {
@@ -286,8 +296,8 @@ export default {
                 page_size: this.tableOptions.itemsPerPage,
                 page_num: this.tableOptions.page,
                 is_home_delivery: false,
-                creation_date__gte: new Date(this.dateFilter[0]).toISOString(),
-                creation_date__lte: new Date(this.dateFilter[1]).toISOString(),
+                creation_date__gte: this.getStartDate.toISOString(),
+                creation_date__lte: this.getEndDate.toISOString(),
             };
             this.tableIsLoading = true;
             CommandEndpoints.list(tableFilters)
@@ -322,8 +332,8 @@ export default {
                 page_size: this.deliveryOptions.itemsPerPage,
                 page_num: this.deliveryOptions.page,
                 is_home_delivery: true,
-                creation_date__gte: new Date(this.dateFilter[0]).toISOString(),
-                creation_date__lte: new Date(this.dateFilter[1]).toISOString(),
+                creation_date__gte: this.getStartDate.toISOString(),
+                creation_date__lte: this.getEndDate.toISOString(),
             };
             this.deliveryIsLoading = true;
             CommandEndpoints.list(deliveryFilters)
