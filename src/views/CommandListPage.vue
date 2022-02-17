@@ -34,7 +34,11 @@
                                 class="text-right"
                                 @click="() => reloadCommands()"
                             >
-                                <v-btn color="blue darken-1" text>
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    :disabled="dateFilter.length < 2"
+                                >
                                     {{ $t("Save") }}
                                 </v-btn>
                             </v-col>
