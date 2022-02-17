@@ -25,19 +25,22 @@
                     <v-container fluid class="white">
                         <v-row>
                             <v-col cols="12" class="pa-0">
-                                <v-date-picker v-model="dateFilter" range :max="new Date().toISOString()"/>
+                                <v-date-picker
+                                    v-model="dateFilter"
+                                    range
+                                    :max="new Date().toISOString()"
+                                />
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col
                                 cols="12"
                                 class="text-right"
-                                @click="() => reloadCommands()"
                             >
                                 <v-btn
                                     color="blue darken-1"
                                     text
-                                    :disabled="dateFilter.length < 2"
+                                    @click="() => reloadCommands()"
                                 >
                                     {{ $t("Save") }}
                                 </v-btn>
@@ -280,13 +283,17 @@ export default {
         },
 
         getStartDate() {
-            const startDateTimestamp = Math.min(...this.dateFilter.map(d => new Date(d)));
+            const startDateTimestamp = Math.min(
+                ...this.dateFilter.map((d) => new Date(d))
+            );
             return new Date(startDateTimestamp);
         },
 
         getEndDate() {
-            const endDateTimestamp = Math.max(...this.dateFilter.map(d => new Date(d)));
-            return new Date(endDateTimestamp)
+            const endDateTimestamp = Math.max(
+                ...this.dateFilter.map((d) => new Date(d))
+            );
+            return new Date(endDateTimestamp);
         },
     },
 
