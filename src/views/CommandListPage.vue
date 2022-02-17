@@ -11,6 +11,32 @@
                 <v-btn color="blue darken-1" text @click="generateSerieTicket">
                     {{ $t("Generate daily tickets") }}
                 </v-btn>
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            {{ $t("Filter date") }}
+                        </v-btn>
+                    </template>
+                    <v-container fluid style="background-color: white;">
+                        <v-row>
+                            <v-col cols="12" class="pa-0">
+                                <v-date-picker v-model="dateFilter" range />
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" class="text-right">
+                                <v-btn color="blue darken-1" text>
+                                    {{ $t("Save") }}
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-menu>
             </v-col>
         </v-row>
 
@@ -142,7 +168,7 @@ export default {
             handler() {
                 this.loadDeliveryCommands();
             },
-            deep: true
+            deep: true,
         },
     },
 
@@ -215,9 +241,6 @@ export default {
             selectedCommand: null,
             showCommandMealListDialog: false,
 
-            // creation_date__gte: startDate.toISOString(),
-            // creation_date__lte: endDate.toISOString(),
-
             showCommandDeleteConfirmation: false,
             selectedCommandToDelete: null,
 
@@ -228,6 +251,14 @@ export default {
             deliveryOptions: {},
             deliveryIsLoading: false,
             deliveryTotalCommands: 0,
+
+            // By default select the last 30 days
+            dateFilter: [
+                new Date(
+                    new Date().getTime() - 1000 * 60 * 60 * 24 * 30
+                ).toISOString(),
+                new Date().toISOString(),
+            ],
         };
     },
 
@@ -253,11 +284,16 @@ export default {
                 .then(({ data }) => {
                     this.tableCommandList = data;
                     // TODO: Return the total number of items from the backend
-                    if(data.length % this.tableOptions.itemsPerPage !== 0) {
-                        this.tableTotalCommands = (this.tableOptions.itemsPerPage * (this.tableOptions.page - 1)) + data.length;
-                    }
-                    else{
-                        this.tableTotalCommands = (this.tableOptions.itemsPerPage * this.tableOptions.page) + this.tableOptions.itemsPerPage;
+                    if (data.length % this.tableOptions.itemsPerPage !== 0) {
+                        this.tableTotalCommands =
+                            this.tableOptions.itemsPerPage *
+                                (this.tableOptions.page - 1) +
+                            data.length;
+                    } else {
+                        this.tableTotalCommands =
+                            this.tableOptions.itemsPerPage *
+                                this.tableOptions.page +
+                            this.tableOptions.itemsPerPage;
                     }
                 })
                 .catch(() =>
@@ -282,11 +318,16 @@ export default {
                 .then(({ data }) => {
                     this.deliveryCommandList = data;
                     // TODO: Return the total number of items from the backend
-                    if(data.length % this.deliveryOptions.itemsPerPage !== 0) {
-                        this.deliveryTotalCommands = (this.deliveryOptions.itemsPerPage * (this.deliveryOptions.page - 1)) + data.length;
-                    }
-                    else {
-                        this.deliveryTotalCommands = (this.deliveryOptions.itemsPerPage * this.deliveryOptions.page) + this.deliveryOptions.itemsPerPage;
+                    if (data.length % this.deliveryOptions.itemsPerPage !== 0) {
+                        this.deliveryTotalCommands =
+                            this.deliveryOptions.itemsPerPage *
+                                (this.deliveryOptions.page - 1) +
+                            data.length;
+                    } else {
+                        this.deliveryTotalCommands =
+                            this.deliveryOptions.itemsPerPage *
+                                this.deliveryOptions.page +
+                            this.deliveryOptions.itemsPerPage;
                     }
                 })
                 .catch(() =>
@@ -294,7 +335,8 @@ export default {
                         "setGlobalError",
                         this.$i18n.t("Can't load delivery commands")
                     )
-                ).finally(() => {
+                )
+                .finally(() => {
                     this.deliveryIsLoading = false;
                 });
         },
