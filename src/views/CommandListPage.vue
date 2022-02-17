@@ -25,7 +25,7 @@
                     <v-container fluid class="white">
                         <v-row>
                             <v-col cols="12" class="pa-0">
-                                <v-date-picker v-model="dateFilter" range />
+                                <v-date-picker v-model="dateFilter" range :max="new Date().toISOString()"/>
                             </v-col>
                         </v-row>
                         <v-row>
