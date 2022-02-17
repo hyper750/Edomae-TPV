@@ -22,14 +22,18 @@
                             {{ $t("Filter date") }}
                         </v-btn>
                     </template>
-                    <v-container fluid style="background-color: white;">
+                    <v-container fluid class="white">
                         <v-row>
                             <v-col cols="12" class="pa-0">
                                 <v-date-picker v-model="dateFilter" range />
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="12" class="text-right">
+                            <v-col
+                                cols="12"
+                                class="text-right"
+                                @click="() => reloadCommands()"
+                            >
                                 <v-btn color="blue darken-1" text>
                                     {{ $t("Save") }}
                                 </v-btn>
@@ -252,10 +256,10 @@ export default {
             deliveryIsLoading: false,
             deliveryTotalCommands: 0,
 
-            // By default select the last 30 days
+            // By default select the last 60 days
             dateFilter: [
                 new Date(
-                    new Date().getTime() - 1000 * 60 * 60 * 24 * 30
+                    new Date().getTime() - 1000 * 60 * 60 * 24 * 60
                 ).toISOString(),
                 new Date().toISOString(),
             ],
@@ -278,6 +282,8 @@ export default {
                 page_size: this.tableOptions.itemsPerPage,
                 page_num: this.tableOptions.page,
                 is_home_delivery: false,
+                creation_date__gte: new Date(this.dateFilter[0]).toISOString(),
+                creation_date__lte: new Date(this.dateFilter[1]).toISOString(),
             };
             this.tableIsLoading = true;
             CommandEndpoints.list(tableFilters)
@@ -312,6 +318,8 @@ export default {
                 page_size: this.deliveryOptions.itemsPerPage,
                 page_num: this.deliveryOptions.page,
                 is_home_delivery: true,
+                creation_date__gte: new Date(this.dateFilter[0]).toISOString(),
+                creation_date__lte: new Date(this.dateFilter[1]).toISOString(),
             };
             this.deliveryIsLoading = true;
             CommandEndpoints.list(deliveryFilters)
@@ -411,6 +419,11 @@ export default {
         closeCommandDeleteConfirmation() {
             this.selectedCommandToDelete = null;
             this.showCommandDeleteConfirmation = false;
+        },
+
+        reloadCommands() {
+            this.loadTableCommands();
+            this.loadDeliveryCommands();
         },
     },
 };
