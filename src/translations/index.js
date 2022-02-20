@@ -26,7 +26,7 @@ export const languagesAvailable = [
 
 const i18n = new VueI18n({
     // Default locale
-    locale: 'es',
+    locale: localStorage.getItem('language') || 'es',
 
     // Available languages
     availableLocales: languagesAvailable.map(({ code }) => code),

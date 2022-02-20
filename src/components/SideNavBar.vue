@@ -243,6 +243,7 @@ export default {
 
         changeLanguage(languageLocale) {
             this.$i18n.locale = languageLocale;
+            localStorage.setItem('language', languageLocale);
         },
     },
 };
