@@ -6,10 +6,14 @@
                     <v-img src="@/assets/avatar.png" alt="Avatar image" />
                 </v-list-item-avatar>
             </v-list-item>
-            <v-list-item>
+            <v-list-item link>
                 <v-menu offset-y>
                     <template v-slot:activator="{ attrs, on }">
-                        <v-list-item-content v-bind="attrs" v-on="on" class="ml-4">
+                        <v-list-item-content
+                            v-bind="attrs"
+                            v-on="on"
+                            class="ml-4"
+                        >
                             <v-list-item-title>
                                 {{ username }}
                             </v-list-item-title>
@@ -23,6 +27,37 @@
                     </template>
 
                     <v-list dense nav>
+                        <v-list-item link>
+                            <v-menu offset-y>
+                                <template v-slot:activator="{ attrs, on }">
+                                    <v-list-item-icon>
+                                        <v-icon> mdi-web </v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    >
+                                        <v-list-item-title>
+                                            {{ $t(getCurrentLanguage.text) }}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                                <v-list dense nav>
+                                    <v-list-item
+                                        link
+                                        v-for="language in getLanguage"
+                                        :key="language.code"
+                                        @click="
+                                            () => changeLanguage(language.code)
+                                        "
+                                    >
+                                        <v-list-item-title>
+                                            {{ $t(language.text) }}
+                                        </v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-list-item>
                         <v-list-item link @click="() => logout()">
                             <v-list-item-icon>
                                 <v-icon> mdi-logout </v-icon>
@@ -93,6 +128,7 @@
 
 <script>
 import UserEndpoints from "../axios/api/user";
+import { languagesAvailable } from "../translations";
 
 export default {
     name: "SideNavBar",
@@ -187,6 +223,14 @@ export default {
             const user = this.$store.getters.getUser;
             return user ? user.admin : false;
         },
+
+        getLanguage() {
+            return languagesAvailable;
+        },
+
+        getCurrentLanguage() {
+            return languagesAvailable.find((l) => l.code === this.$i18n.locale);
+        },
     },
 
     methods: {
@@ -195,6 +239,10 @@ export default {
             this.$store.dispatch("setToken", null);
             this.$store.dispatch("setUser", null);
             this.$router.push({ name: "Login" });
+        },
+
+        changeLanguage(languageLocale) {
+            this.$i18n.locale = languageLocale;
         },
     },
 };
