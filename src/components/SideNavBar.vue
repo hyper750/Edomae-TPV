@@ -7,9 +7,9 @@
                 </v-list-item-avatar>
             </v-list-item>
             <v-list-item>
-                <v-list-group :value="false">
-                    <template v-slot:activator>
-                        <v-list-item-content>
+                <v-menu offset-y>
+                    <template v-slot:activator="{ attrs, on }">
+                        <v-list-item-content v-bind="attrs" v-on="on" class="ml-4">
                             <v-list-item-title>
                                 {{ username }}
                             </v-list-item-title>
@@ -17,10 +17,13 @@
                                 {{ fullname }}
                             </v-list-item-subtitle>
                         </v-list-item-content>
+                        <v-list-item-icon>
+                            <v-icon>mdi-chevron-down</v-icon>
+                        </v-list-item-icon>
                     </template>
 
                     <v-list dense nav>
-                        <v-list-item link @click="logout">
+                        <v-list-item link @click="() => logout()">
                             <v-list-item-icon>
                                 <v-icon> mdi-logout </v-icon>
                             </v-list-item-icon>
@@ -31,7 +34,7 @@
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>
-                </v-list-group>
+                </v-menu>
             </v-list-item>
         </v-list>
 
@@ -110,7 +113,7 @@ export default {
                 {
                     name: "Command List",
                     link: "/commandList",
-                    icon: "mdi-clipboard-list-outline"
+                    icon: "mdi-clipboard-list-outline",
                 },
                 {
                     name: "Admin",
