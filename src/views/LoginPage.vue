@@ -8,11 +8,9 @@
             >
                 <div class="ma-3">
                     <v-row>
-                        <v-col cols="3" md="3">
-                            <v-img src="@/assets/logo.png" alt="Edomae logo" />
-                        </v-col>
-                        <v-col md="4" cols="4" class="my-auto mx-auto">
-                            <h2>{{ $t("Login") }}</h2>
+                        <v-col cols="12">
+                            <v-img src="@/assets/logo.png" alt="Edomae logo" style="width: 90px" />
+                            <h2 class="text-center">{{ $t("Login") }}</h2>
                         </v-col>
                     </v-row>
 
