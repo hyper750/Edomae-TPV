@@ -157,6 +157,7 @@ import CommandEndpoints from "../axios/api/command";
 import TicketCommandEndpoints from "../axios/api/ticketCommand";
 import CommandMealListDialog from "../components/CommandMealListDialog";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
+import TableEndpoints from "../axios/api/table";
 
 export default {
     components: {
@@ -180,8 +181,14 @@ export default {
         },
     },
 
+    mounted() {
+        this.loadTableList();
+    },
+
     data() {
         return {
+            tableList: [],
+
             tableCommandListHeaders: [
                 {
                     text: this.$i18n.t("Id"),
@@ -193,7 +200,7 @@ export default {
                 },
                 {
                     text: this.$i18n.t("Table"),
-                    value: "table",
+                    value: "table_num",
                 },
                 {
                     text: this.$i18n.t("Paid"),
@@ -272,7 +279,15 @@ export default {
 
     computed: {
         getTableItems() {
-            return this.tableCommandList;
+            return this.tableCommandList.map((tableCommand) => {
+                const tableContent = this.tableList.find((t) => t.id === tableCommand.table);
+
+                if(tableContent) {
+                    tableCommand.table_num = tableContent.number;
+                }
+
+                return tableCommand;
+            });
         },
 
         getDeliveryItems() {
@@ -295,6 +310,19 @@ export default {
     },
 
     methods: {
+        loadTableList() {
+            TableEndpoints.list()
+                .then(({ data }) => {
+                    this.tableList = data;
+                })
+                .catch(() =>
+                    this.$store.dispatch(
+                        "setGlobalError",
+                        this.$i18n.t("Can't load tables")
+                    )
+                );
+        },
+
         loadTableCommands() {
             const tableFilters = {
                 page_size: this.tableOptions.itemsPerPage,
